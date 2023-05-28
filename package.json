@@ -2,7 +2,6 @@
   "name": "apartments-app",
   "homepage": "https://oleksii-she.github.io/aparments-app/",
   "version": "0.0.0",
-  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
