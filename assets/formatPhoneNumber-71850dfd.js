@@ -1,0 +1,1 @@
+const l=t=>{const e=t.replace(/\D/g,""),o=e.slice(0,2),c=e.slice(2,5),r=e.slice(5,8),n=e.slice(8,10),s=e.slice(10,12);return`+${o}(${c})${r}-${n}-${s}`},i=t=>"+380"+t.replace(/\D/g,"").slice(-9);export{i as c,l as f};
