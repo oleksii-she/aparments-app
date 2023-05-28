@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap');
+@import 'modern-normalize/modern-normalize.css';
+@import url('./utils/container.scss');
+@import url('./utils/style.scss');
+
+body {
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  margin: 0;
+}
+
+p {
+  font-family: 'Montserrat';
+  font-weight: 500;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+div {
+  width: auto;
+}
