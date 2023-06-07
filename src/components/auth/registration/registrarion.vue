@@ -4,9 +4,9 @@ import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores'
 import { convertPhoneNumber } from '../../../utils/formatPhoneNumber'
-
+import { createToaster } from '@meforma/vue-toaster'
 import { charLimit, emailValidation, passwordValidation } from '@/utils/validation'
-
+const toaster = createToaster({ position: 'top' })
 const authStore = useAuthStore()
 const router = useRouter()
 const registrationState = reactive({
@@ -17,8 +17,10 @@ const registrationState = reactive({
   confirmPassword: ''
 })
 
+
 const isValid = ref(false)
 const loading = ref(false)
+const showPassword = ref(false)
 
 const errorMessageState = reactive({
   name: '',
@@ -53,8 +55,8 @@ watch(registrationState, () => {
 
   if (registrationState.confirmPassword) {
     if (registrationState.password !== registrationState.confirmPassword) {
-      errorMessageState.password = 'Паролі не співпадають'
-      errorMessageState.confirmPassword = 'Паролі не співпадають'
+      errorMessageState.password = 'Passwords do not match'
+      errorMessageState.confirmPassword = 'Passwords do not match'
       valid = false
     } else {
       errorMessageState.password = ''
@@ -65,7 +67,12 @@ watch(registrationState, () => {
   isValides.value = valid // set isValides directly instead of returning it
 })
 const onSubmit = async () => {
+  const NumberRegex = /^(\+|\d{2})\d{12,15}$/
   const phone = convertPhoneNumber(registrationState.phone)
+  console.log(phone);
+  if (!NumberRegex.test(phone)) {
+      return toaster.warning(`Wrongly entered number`)
+    }
   const formData = {
     name: registrationState.name,
     email: registrationState.email,
@@ -78,7 +85,7 @@ const onSubmit = async () => {
   // Перевірка співпадіння пароля та підтвердження пароля
 
   if (!formData.name || !formData.email || !formData.password || !formData.phone) {
-    return console.log('Всі поля повинні бути заповненні')
+    return  toaster.warning('Всі поля повинні бути заповненні')
   }
 
   try {
@@ -88,14 +95,27 @@ const onSubmit = async () => {
       loading.value = false
       router.push({ name: 'home' })
     } else {
-      return console.log('Всі поля повинні бути заповненні')
+      return toaster.warning('Всі поля повинні бути заповненні')
     }
   } catch (error) {
-    if (authStore.statusError) {
-      console.log(authStore.statusError)
-      return
-    }
+    loading.value = false
+   
+    return toaster.warning(authStore.statusError)
+// if (authStore.statusError ==='Request failed with status code 400') {
+//   return toaster.warning('Всі поля повинні бути заповненні')
+// }else{
+//   return toaster.warning(authStore.statusError)
+// }
+
+
+
+
   }
+}
+
+const onShowPassword =()=>{
+
+  showPassword.value = !showPassword.value
 }
 </script>
 
@@ -104,7 +124,7 @@ const onSubmit = async () => {
     <h2 class="form__title">Реєстрація</h2>
     <ULoader :loading="loading" />
     <UInput
-      class="input_margin"
+    
       v-model="registrationState.name"
       placeholder="Name"
       type="text"
@@ -113,7 +133,7 @@ const onSubmit = async () => {
     >
     </UInput>
     <UInput
-      class="input_margin"
+     
       v-model="registrationState.email"
       placeholder="Email"
       type="email"
@@ -121,28 +141,41 @@ const onSubmit = async () => {
       @update:isValid="isValid = $event"
     ></UInput>
     <UInput
-      class="input_margin"
+     
       v-model="registrationState.phone"
       placeholder="Phone"
       type="tel"
       @update:isValid="isValid = $event"
     ></UInput>
-    <UInput
-      class="input_margin"
-      v-model="registrationState.password"
-      placeholder="Password"
-      type="password"
-      :errorMessage="errorMessageState.password"
-    >
-    </UInput>
-    <UInput
-      class="input_margin"
-      v-model="registrationState.confirmPassword"
-      placeholder="Confirm password"
-      type="password"
-      :errorMessage="errorMessageState.confirmPassword"
-    >
-    </UInput>
+    <div  class='wrapper-password'>
+      <UInput
+     
+     v-model="registrationState.password"
+     placeholder="Password"
+     type="password"
+     :errorMessage="errorMessageState.password"
+     :showPassword='showPassword'
+   >
+   </UInput>
+   <button type='button' class='button-eyes' @click="onShowPassword"><svg class='eyes-icon'>
+          <use  xlink:href="@/assets/svg/sprite.svg#icon-eyes"></use>
+        </svg></button>
+    </div>
+
+      <UInput
+    v-model="registrationState.confirmPassword"
+    placeholder="Confirm password"
+    type="password"
+    :errorMessage="errorMessageState.confirmPassword"
+    :showPassword='showPassword'
+  >
+  </UInput>
+
+
+
+   
+<a href="https://apartments-backend.onrender.com/api/auth/google"><img src="@/assets/icon-png/google.png" alt="google-auth-link"></a>
+<RouterLink :to="{name:'login'}">Enter in another way</RouterLink>
     <UButton>Зареєструвати</UButton>
   </form>
 </template>
@@ -152,6 +185,7 @@ const onSubmit = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  row-gap: 25px;
 }
 
 .form__title {
@@ -162,11 +196,35 @@ const onSubmit = async () => {
   margin-bottom: 12px;
 }
 
-.input_margin {
-  margin-bottom: 15px;
+.wrapper-password{
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.button-eyes{
+  position: absolute;
 
-  &:nth-child(6) {
-    margin-bottom: 69px;
-  }
+  top: 8px;
+  outline: none;
+  right: 15px;
+background-color: transparent;
+border: none;
+  width: 30px;
+  height: 30px;
+cursor: pointer;
+
+
+
+
+}
+.eyes-icon{
+  width: 32px;
+  height: 32px;
+stroke: $main-color;
+  fill: transparent;
+&:hover,&:focus{
+  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+ stroke: $activeColor;
+}
 }
 </style>

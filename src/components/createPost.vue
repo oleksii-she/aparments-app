@@ -4,9 +4,13 @@ import { computed, reactive, ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'vue-router'
 import { useApiApartmentsStore } from '@/stores/useStores/useApartmentStore'
+import { useAuthStore } from '@/stores'
 import { countriesApi } from '../services/apiOther'
 import { createToaster } from '@meforma/vue-toaster'
-
+import { watchEffect } from 'vue'
+import Modal from'./global/modal.vue'
+import PhoneWarning from './phoneWarning.vue'
+const authStore=useAuthStore()
 const createPost = reactive({
   name: '',
   location: '',
@@ -28,6 +32,16 @@ const loading = ref(false)
 const countries = ref(null)
 const showCountriesList = ref(true)
 const input = ref(null)
+const phoneWarningToggle = ref(false)
+
+
+watchEffect(() => {
+  if (!authStore.phone) {
+    phoneWarningToggle.value = true
+  } else {
+    phoneWarningToggle.value = false
+  }
+})
 
 const fetchCountries = async () => {
   try {
@@ -187,18 +201,26 @@ const onSubmit = async (e) => {
 
     await apartmentStore.addApartmentPost(formData)
     loading.value = false
-    router.push({ name: 'home' })
+    router.push({ name: 'apartments' })
     return toaster.success('data successfully added')
   } catch (error) {
     console.log(error.message)
     return toaster.error(error.message)
   }
 }
+
+const hideModalRemove = ()=>{
+
+  router.push({ name: 'apartments' })
+  return phoneWarningToggle.value=!phoneWarningToggle.value
+}
 </script>
 
 <template lang="">
+
   <ULoader :loading="loading" />
   <form @submit.prevent.stop="onSubmit" class="form__advertisement">
+    <Modal v-if="phoneWarningToggle" :toggleModal='phoneWarningToggle' :hideDialog="hideModalRemove"><PhoneWarning/></Modal>
     <h2 class="title__form-create">Створити оголошення</h2>
     <div class="top__wrapper">
       <UInput v-model="createPost.name" placeholder="Назва оголошення" class="uinput">
@@ -349,7 +371,7 @@ const onSubmit = async (e) => {
       </div>
     </div>
 
-    <UButton>Створити оголошення</UButton>
+    <UButton  v-if="!phoneWarningToggle">Створити оголошення</UButton>
   </form>
 </template>
 

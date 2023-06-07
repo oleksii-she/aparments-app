@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import { onMounted, onBeforeUnmount } from 'vue'
+
 const props = defineProps({
   toggleModal: {
     type: Boolean,

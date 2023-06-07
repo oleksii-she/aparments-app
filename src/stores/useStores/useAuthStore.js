@@ -51,25 +51,32 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    async current() {
+    async current(googleToken) {
+   
       try {
-        if (!this.token) {
-          return
-        }
-        const response = await getCurrentUser(this.token)
+    if(googleToken){
+      this.token=googleToken
+    }
+    if (!this.token) {
+      return
+    }
 
+        const response = await getCurrentUser(this.token)
+        this.isAuth = true
         this.name = response.name
         this.email = response.email
         this.phone = response.phone
-        this.isAuth = true
         this.id = response._id
       } catch (error) {
         console.log(error.message)
         this.isAuth = false
+        this.token=''
         this.statusError = error.message
 
         if (error.response && typeof error.response === 'object' && error.response.data) {
+          this.token = ''
           throw new Error(error.response.data.message)
+          
         } else {
           throw new Error('An error occurred while retrieving the current user.')
         }
@@ -96,8 +103,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     async fetchUpdateUser(data) {
-      const result = await updateUser(data)
-      console.log(result)
+     await updateUser(data)
     }
   }
 })

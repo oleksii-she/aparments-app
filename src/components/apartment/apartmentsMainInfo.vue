@@ -93,7 +93,7 @@ const apartmentDellete = async (id) => {
     loading.value = true
     await fetchApartmentsDelleteId(id)
     loading.value = false
-    router.push({ name: 'home' })
+    router.push({ name: 'apartments' })
   } catch (error) {
     console.log(error.message)
   }

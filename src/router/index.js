@@ -6,9 +6,11 @@ import { useAuthStore } from '../stores/useStores/useAuthStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {  path: '/',
+    redirect: '/apartments'},
     {
       path: '/apartments',
-      name: 'home',
+      name: 'apartments',
       component: HomeView
     },
     {
@@ -78,7 +80,7 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.matched.some((record) => record.meta.hideForAuth)) {
     if (isAuth) {
-      next({ name: 'home' })
+      next({ name: 'apartments' })
     } else {
       next()
     }

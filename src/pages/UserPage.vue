@@ -8,6 +8,7 @@ import { formatPhoneNumber, convertPhoneNumber } from '@/utils/formatPhoneNumber
 import ApartmentList from '../components/apartment/apartmentList.vue'
 import ApartmentsItem from '@/components/apartment/apartmentItem.vue'
 import Pagination from '../components/global/pagination.vue'
+import { createToaster } from '@meforma/vue-toaster'
 
 const route = useRoute()
 const router = useRouter()
@@ -15,7 +16,7 @@ const perPage = 9
 const userStore = useUserStore()
 const page = ref(parseInt(route.query.page) || 1)
 const authStore = useAuthStore()
-
+const toaster = createToaster({ position: 'top' })
 const targetValue = reactive({
   name: false,
   phone: false
@@ -32,8 +33,12 @@ watchEffect(() => {
   userStore.fetchUserApartments(id, page.value)
 
   userValue.name = authStore.name
-  const number = formatPhoneNumber(authStore.phone)
-  userValue.phone = number
+  if (authStore.phone) {
+    const number = formatPhoneNumber(authStore.phone)
+    userValue.phone = number
+  }
+
+
 })
 
 const changeUpdateUser = (e) => {
@@ -64,6 +69,13 @@ const updateValue = async () => {
   } catch (error) {
     targetValue.phone = false
     targetValue.name = false
+    if (error.request.status === 400) {
+      userValue.phone = authStore.phone
+      return toaster.warning(error.request.response)
+    } else {
+      console.log(error.message)
+    }
+
   }
 }
 </script>
@@ -106,7 +118,8 @@ const updateValue = async () => {
 
             <div class="wrapper">
               <div v-if="!targetValue.phone" class="user__text-wrapper">
-                <p class="user__text">Телефон: {{ userValue.phone }}</p>
+                <p class="user__text" v-if="userValue.phone">Телефон: {{ userValue.phone }}</p>
+                <p class="user__text" v-else>Телефон: +38(000)000-00-00</p>
                 <button @click="targetValue.phone = true" class="btn-edit">
                   <svg class="btn-edit__icon">
                     <use xlink:href="@/assets/svg/sprite.svg#icon-edit"></use>
