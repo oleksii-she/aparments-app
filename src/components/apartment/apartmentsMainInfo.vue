@@ -122,20 +122,21 @@ const roundedRating = Math.round(props.apartment.rating)
       <div class="price">
         <ul class="price__list">
           <li class="price__item">
-            <p class="price__text"><span>Address</span> {{ apartment.address }}</p>
+            <p class="price__text"><span>Address:</span> {{ apartment.address }}</p>
           </li>
           <li class="price__item">
-            <p class="price__text"><span>Price per night</span> {{ apartment.price }}$</p>
+            <p class="price__text"><span>Price per night:</span> {{ apartment.price }}$</p>
           </li>
           <li class="price__item">
             <p class="price__text">
-              <span>Price from 3 nights</span> {{ apartment.longStayPrice }}$
+              <span>Price from 3 nights:</span> {{ apartment.longStayPrice }}$
             </p>
           </li>
         </ul>
-        <p class="price__description">{{ apartment.description }}</p>
       </div>
-
+<div class="description">
+  <p class="description__text">{{apartment.description}}</p>
+</div>
       <div class="button-box">
         <UButton v-if="id !== apartment.owner" class="button-box__button">Reserve</UButton>
         <UButton v-else class="button-box__button" @click="toggleModalRemove = true"
@@ -188,7 +189,7 @@ const roundedRating = Math.round(props.apartment.rating)
               <button v-if="item.comment.length > 70" @click="toggleReadMore">
                 {{ !toggle ? 'Читати далі' : 'cкоротити' }}
               </button>
-              <button @click="deleteComment(item._id)" v-if="!removeToggleComment">Remove</button>
+              <button @click="deleteComment(item._id)" v-if="!removeToggleComment && id === apartment.owner ">Remove</button>
             </div>
           </div>
         </div>
@@ -279,7 +280,7 @@ const roundedRating = Math.round(props.apartment.rating)
 .comments-wrapper {
   max-height: 389px;
   overflow: auto;
-  margin-bottom: 25px;
+  margin-bottom: 21px
 }
 .heading {
   @media screen and (min-width: 768px) {
@@ -333,12 +334,6 @@ const roundedRating = Math.round(props.apartment.rating)
   height: 410px;
 }
 
-/* .carousel {
-  /* max-width: 90%;
-  height: 50%;
-  margin-bottom: 30px; */
-/* }  */
-
 .slide {
   @media screen and (min-width: 768px) {
     display: flex;
@@ -350,26 +345,27 @@ const roundedRating = Math.round(props.apartment.rating)
 
 .price {
   &__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
     background-color: #e1efff;
+    width: 350px;
+    padding: 20px;
+
+
     @media screen and (min-width: 768px) {
       display: flex;
       width: 600px;
-      padding-left: 0;
-      justify-content: space-between;
+
+      justify-content: center;
       align-items: center;
+      flex-direction: row;
+      column-gap: 30px;
+
     }
   }
 
-  &__description {
-    @media screen and (min-width: 768px) {
-      font-size: 16px;
-      line-height: calc(20 / 16);
-      margin-bottom: 24px;
-    }
-    @media screen and (min-width: 1280px) {
-      width: 600px;
-    }
-  }
+  
 
   &__text {
     font-size: 20px;
@@ -382,6 +378,26 @@ const roundedRating = Math.round(props.apartment.rating)
     }
   }
 }
+
+.description{
+  width: 350px;
+  text-align: left;
+  padding: 10px;
+
+  @media screen and (min-width: 768px) {
+    width: 600px;
+    }
+  &__description {
+    @media screen and (min-width: 768px) {
+      font-size: 16px;
+      line-height: calc(20 / 16);
+      margin-bottom: 24px;
+    }
+    @media screen and (min-width: 1280px) {
+      width: 600px;
+    }
+  }
+}
 .img {
   max-width: 100%;
 
@@ -390,6 +406,10 @@ const roundedRating = Math.round(props.apartment.rating)
 }
 .comments {
   margin-bottom: 8px;
+  @media screen and (max-width: 768px) {
+width: 350px;
+  }
+
 }
 .avatar-box {
   display: flex;

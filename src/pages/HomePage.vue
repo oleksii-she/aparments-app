@@ -18,7 +18,7 @@ const authStore=useAuthStore()
 const selectedCountry = ref(null)
 const selectedPrice = ref(null)
 const page = ref(parseInt(route.query.page) || 1)
-const countries = ref(['Країна'])
+const countries = ref(['All countries'])
 const phoneWarningToggle = ref(false)
 
 let renderApartmentHandler = false
@@ -30,12 +30,12 @@ watchEffect(async () => {
   router.push({ query: { ...route.query, page: page.value } })
   await apiStore.fetchApartments(page.value, selectedCountry.value)
 
-  if (selectedCountry.value === 'Країна') {
+  if (selectedCountry.value === 'All countries') {
     selectedCountry.value = null
   }
 
-  const fatchContries = await allCountries()
-  countries.value = fatchContries.data.countries
+  const fetchCountries = await allCountries()
+  countries.value = fetchCountries.data.countries
 
 
  
@@ -48,10 +48,7 @@ watchEffect(async ()=>{
     router.push({ name: 'apartments' })
   }
   phoneWarningToggle.value = false;
-if (authStore.isAuth) {
-  phoneWarningToggle.value = false;
-  return  
-}
+
   if (authStore.isAuth ) {
     if (!authStore.phone && phoneWarningToggle.value === false) {
   phoneWarningToggle.value = true;
@@ -88,7 +85,7 @@ watch(selectedPrice, async () => {
             v-if="countries"
             :countries="countries"
             v-model="selectedCountry"
-            :defaultOption="'Країна'"
+            :defaultOption="'All countries'"
           />
           <UInput
             v-if="countries"

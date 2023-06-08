@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { onMounted, onBeforeUnmount } from 'vue'
+import { onMounted, onBeforeUnmount, watchEffect } from 'vue'
 
 const props = defineProps({
   toggleModal: {
@@ -13,33 +13,31 @@ const props = defineProps({
   }
 })
 
+watchEffect(()=>{
+  console.log(props.toggleModal);
+  if (props.toggleModal) {
+  window.document.querySelector('body').style.overflow = 'hidden'
+}
+
+})
+
 const handleEscKey = (event) => {
   if (event.keyCode === 27) {
+    window.document.querySelector('body').style.overflow = ''
     props.hideDialog()
   }
 }
 
 onMounted(() => {
   window.addEventListener('keydown', handleEscKey)
+
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleEscKey)
+  window.document.querySelector('body').style.overflow = ''
 })
-// WatchEffect(() => {
-//   //   if (props.toggleModal) {
-//   //     document.body.style.overflow = 'hidden'
-//   //   }
-// })
 
-// const onClose = (e) => {
-//   console.log(e.target)
-//   if (e.target === e.currentTarget) {
-//     // document.body.style.overflow = ''
-//     // props.toggleModal()
-//   }
-//   //   Overlay()
-// }
 </script>
 
 <template>

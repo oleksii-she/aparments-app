@@ -9,16 +9,20 @@ import BurgerBtn from './components/burgerBtn.vue'
 import Sidebar from './components/sidebar.vue'
 import NavMenu from './components/navMenu.vue'
 import { useScreenSize } from './utils/useScreenSize'
+import { onMounted, watchEffect } from 'vue'
 const router = useRouter()
 const authStore = useAuthStore()
 const store = appStore()
 
-import { onMounted, watchEffect } from 'vue'
+
 
 onMounted(() => {
   watchEffect(() => {
     if (authStore.token) {
       authStore.current()
+    }
+    if(!store.isOpen){
+      window.document.querySelector('body').style.overflow = ''
     }
   })
 })

@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', {
 
   persist: {
     storage: localStorage,
-    paths: ['token', 'isAuth', 'id']
+    paths: ['token', 'isAuth', 'id', 'phone']
   },
 
   actions: {

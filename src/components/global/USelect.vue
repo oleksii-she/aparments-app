@@ -15,7 +15,7 @@ defineProps(
     },
     defaultOption: {
       type: String,
-      default: 'Країна'
+      default: 'all countries'
     }
   },
   { raw: true, shallow: true }

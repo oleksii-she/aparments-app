@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router'
+import { watchEffect } from 'vue';
 import { appStore } from '@/stores'
 
 const route = useRoute()
@@ -8,10 +9,20 @@ const store = appStore()
 defineProps({
   isAuth: Boolean
 })
+watchEffect(()=>{
+  if (store.isOpen) {
+    window.document.querySelector('body').style.overflow = 'hidden'
+ 
+  }
+ 
+})
 
 const noClickToogleSidebar = () => {
   if (store.isOpen) {
+    // isBodyOverflowHidden.value = true;
     return store.toggleOpen()
+  }else{
+    // isBodyOverflowHidden.value = false;
   }
 }
 </script>

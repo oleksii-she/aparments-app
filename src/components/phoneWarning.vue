@@ -11,6 +11,8 @@ const authStore = useAuthStore()
 const phone = ref('')
 const loading = ref(false)
 const toaster = createToaster({ position: 'top' })
+
+
 const createPhone = async () => {
   try {
     const NumberRegex = /^(\+|\d{2})\d{12,15}$/
@@ -23,6 +25,7 @@ const createPhone = async () => {
    await authStore.fetchUpdateUser({ phone: number })
     authStore.current()
     loading.value=false
+    window.document.querySelector('body').style.overflow = ''
     emits('update:value', false)
 
   } catch (error) {
@@ -35,7 +38,7 @@ const createPhone = async () => {
 }
 </script>
 <template>
-  <div>
+  <div class="phone-waning">
     <h2>Please enter your phone number</h2>
     <input
       ref="phoneInput"
@@ -52,10 +55,12 @@ const createPhone = async () => {
 </template>
 
 <style scoped lang="scss">
-.phone {
+.phone-waning {
   /* background-color: transparent;
     border: none;
     outline: none;
     width: 160px; */
+    overflow: hidden;
 }
+
 </style>
