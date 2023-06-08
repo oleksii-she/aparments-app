@@ -1,7 +1,5 @@
 <script setup>
-// import { ref, watch, defineEmits, defineProps, computed } from 'vue'
 
-// const emits = defineEmits(['update:modelValue'])
 
 defineProps(
   {
@@ -43,7 +41,7 @@ defineProps(
   padding: 11px 20px;
   outline: none;
   cursor: pointer;
-  width: 150px;
+  width: 180px;
   @media screen and (min-width: 768px) {
     width: 220px;
   }
