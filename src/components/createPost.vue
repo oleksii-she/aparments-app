@@ -221,10 +221,10 @@ const hideModalRemove = ()=>{
   <ULoader :loading="loading" />
   <form @submit.prevent.stop="onSubmit" class="form__advertisement">
     <Modal v-if="phoneWarningToggle" :toggleModal='phoneWarningToggle' :hideDialog="hideModalRemove"><PhoneWarning/></Modal>
-    <h2 class="title__form-create">Створити оголошення</h2>
+    <h2 class="title__form-create">Create an ad</h2>
     <div class="top__wrapper">
       <UInput v-model="createPost.name" placeholder="Назва оголошення" class="uinput">
-        <p class="title-input">Назва оголошення</p></UInput
+        <p class="title-input">The name of the ad</p></UInput
       >
 
       <div>
@@ -254,7 +254,7 @@ const hideModalRemove = ()=>{
     </div>
     <div class="average__wrapper">
       <div class="main__photo">
-        <h3 :style="{ marginBottom: '7px' }">Головне фото</h3>
+        <h3 :style="{ marginBottom: '7px' }">Main photo</h3>
         <label for="" class="cover-img__wrapper">
           <button v-if="createPost.coverImage" class="clear-img" @click="deleteCoverImage">
             <svg class="clear-img__icon">
@@ -286,19 +286,19 @@ const hideModalRemove = ()=>{
             class="uinput"
             type="number"
           >
-            <p class="title-input">Кількість кімнат</p></UInput
+            <p class="title-input">Number of rooms</p></UInput
           >
           <UInput v-model="createPost.address" placeholder="Адреса" class="uinput">
-            <p class="title-input">Адреса</p></UInput
+            <p class="title-input">Address</p></UInput
           >
           <div class="price">
-            <p class="title-input">ціна за ніч</p>
+            <p class="title-input">Price per night</p>
 
             <div class="price__wrapper">
               <h2 class="price__title">$</h2>
               <UInput
                 v-model="createPost.price"
-                placeholder="ціна за ніч"
+                placeholder="Price per night"
                 class="uinput"
                 type="number"
               >
@@ -306,12 +306,12 @@ const hideModalRemove = ()=>{
             </div>
           </div>
           <div class="price">
-            <p class="title-input">ціна від трьох ночей</p>
+            <p class="title-input">Price from three nights</p>
             <div class="price__wrapper">
               <h2 class="price__title">$</h2>
               <UInput
                 v-model="createPost.longStayPrice"
-                placeholder="ціна від трьох ночей"
+                placeholder="Price from three nights"
                 class="uinput"
                 type="number"
                 style="width: 70px"
@@ -326,10 +326,10 @@ const hideModalRemove = ()=>{
           type="textarea"
           class="uinput"
         >
-          <p class="title-input">Опишіть апартаменти</p></UInput
+          <p class="title-input">Describe the apartments</p></UInput
         >
         <div>
-          <p class="title-input">Клас апартаментів</p>
+          <p class="title-input">Apartment class</p>
           <select name="select" class="select">
             <option value="Economy">Economy</option>
             <option value="Comfort" selected>Comfort</option>
@@ -371,7 +371,7 @@ const hideModalRemove = ()=>{
       </div>
     </div>
 
-    <UButton  v-if="!phoneWarningToggle">Створити оголошення</UButton>
+    <UButton  v-if="!phoneWarningToggle">Create an ad</UButton>
   </form>
 </template>
 
@@ -382,6 +382,10 @@ const hideModalRemove = ()=>{
   align-items: center;
   flex-direction: column;
   padding: 0;
+  @media screen and (max-width: 768px) {
+    padding-top: 20px;
+  }
+
 }
 .input-wrapper {
   @media screen and (min-width: 1280px) {

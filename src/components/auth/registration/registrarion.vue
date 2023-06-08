@@ -85,7 +85,7 @@ const onSubmit = async () => {
   // Перевірка співпадіння пароля та підтвердження пароля
 
   if (!formData.name || !formData.email || !formData.password || !formData.phone) {
-    return  toaster.warning('Всі поля повинні бути заповненні')
+    return  toaster.warning('All fields must be filled')
   }
 
   try {
@@ -93,30 +93,18 @@ const onSubmit = async () => {
       loading.value = true
       await authStore.register(formData)
       loading.value = false
-      router.push({ name: 'home' })
+      router.push({ name: 'apartments' })
     } else {
-      return toaster.warning('Всі поля повинні бути заповненні')
+      return toaster.warning('All fields must be filled')
     }
   } catch (error) {
     loading.value = false
    
     return toaster.warning(authStore.statusError)
-// if (authStore.statusError ==='Request failed with status code 400') {
-//   return toaster.warning('Всі поля повинні бути заповненні')
-// }else{
-//   return toaster.warning(authStore.statusError)
-// }
-
-
-
-
   }
 }
 
-const onShowPassword =()=>{
 
-  showPassword.value = !showPassword.value
-}
 </script>
 
 <template lang="">
@@ -157,7 +145,7 @@ const onShowPassword =()=>{
      :showPassword='showPassword'
    >
    </UInput>
-   <button type='button' class='button-eyes' @click="onShowPassword"><svg class='eyes-icon'>
+   <button type='button' class='button-eyes'  @click="showPassword = !showPassword"><svg class='eyes-icon'>
           <use  xlink:href="@/assets/svg/sprite.svg#icon-eyes"></use>
         </svg></button>
     </div>

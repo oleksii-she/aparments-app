@@ -24,7 +24,7 @@ const warningState = reactive({
 })
 const loading = ref(false)
 const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/
-
+const showPassword = ref(false)
 const onSubmit = async () => {
   let isValid = true
 
@@ -77,6 +77,8 @@ const onSubmit = async () => {
     }
   }
 }
+
+
 </script>
 
 <template lang="">
@@ -87,15 +89,20 @@ const onSubmit = async () => {
     <UInput class="input_margin" v-model="registrationState.email" placeholder="Email" type="email"
       ><p class="warning__text">{{ warningState.email }}</p></UInput
     >
+    <div  class='wrapper-password'>
     <UInput
       class="input_margin"
       v-model="registrationState.password"
       placeholder="Password"
       type="password"
+      :showPassword='showPassword'
     >
       <p class="warning__text">{{ warningState.password }}</p>
     </UInput>
- 
+    <button type='button' class='button-eyes' @click="showPassword = !showPassword"><svg class='eyes-icon'>
+          <use  xlink:href="@/assets/svg/sprite.svg#icon-eyes"></use>
+        </svg></button>
+      </div>
     <a href="https://apartments-backend.onrender.com/api/auth/google"><img src="@/assets/icon-png/google.png" alt="google-auth-link"></a>
    
     <RouterLink :to="{name:'registration'}">Register in another way</RouterLink>
@@ -127,5 +134,37 @@ const onSubmit = async () => {
   position: absolute;
   bottom: -16px;
   left: 28px;
+}
+
+.wrapper-password{
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.button-eyes{
+  position: absolute;
+
+  top: 8px;
+  outline: none;
+  right: 15px;
+background-color: transparent;
+border: none;
+  width: 30px;
+  height: 30px;
+cursor: pointer;
+
+
+
+
+}
+.eyes-icon{
+  width: 32px;
+  height: 32px;
+stroke: $main-color;
+  fill: transparent;
+&:hover,&:focus{
+  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+ stroke: $activeColor;
+}
 }
 </style>
