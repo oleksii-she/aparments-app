@@ -36,7 +36,7 @@ const phoneWarningToggle = ref(false)
 
 
 watchEffect(() => {
-  if (!authStore.phone) {
+  if (authStore.phone === '+380000000000') {
     phoneWarningToggle.value = true
   } else {
     phoneWarningToggle.value = false

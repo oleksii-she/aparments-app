@@ -38,10 +38,10 @@ defineProps(
 .USelect {
   background: #ffffff;
   border: 2px solid #ff662d;
-  padding: 11px 20px;
+  padding: 10px 10px;
   outline: none;
   cursor: pointer;
-  width: 180px;
+  width: 150px;
   @media screen and (min-width: 768px) {
     width: 220px;
   }
