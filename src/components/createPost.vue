@@ -230,7 +230,7 @@ const hideModalRemove = ()=>{
       <div>
         <UInput
           v-model="createPost.country"
-          placeholder="all countrys"
+          placeholder="Country"
           class="uinput"
           @input="fetchCountries"
         >
