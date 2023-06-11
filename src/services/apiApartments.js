@@ -43,3 +43,13 @@ export const apartmentRating = async (id, index) => {
   const response = await axiosInstance.put(`apartments/${id}/rating`, { rating: index })
   return response.data
 }
+
+export const addReserve = async (id,data) => {
+  const response = await axiosInstance.post(`apartments/${id}/reserve`,data, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  return response.data
+}
+

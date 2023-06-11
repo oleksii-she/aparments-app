@@ -48,14 +48,16 @@ watchEffect(async ()=>{
     router.push({ name: 'apartments' })
   }
   phoneWarningToggle.value = false;
-
-  if (authStore.isAuth ) {
+  setTimeout(() => {
+    if (authStore.isAuth ) {
     if (!authStore.phone && phoneWarningToggle.value === false) {
   phoneWarningToggle.value = true;
 } else if (authStore.phone && phoneWarningToggle.value === true) {
   phoneWarningToggle.value = false;
 }
   }
+    }, 2000)
+
 })
 watch(selectedPrice, async () => {
   if (selectedPrice.value < 0) {

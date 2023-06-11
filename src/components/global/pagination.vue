@@ -2,7 +2,7 @@
 <!-- Updated child component code -->
 <script setup>
 import VPagination from '@hennge/vue3-pagination'
-import { defineProps, computed, defineEmits } from 'vue'
+import {  computed } from 'vue'
 const emits = defineEmits(['update:value'])
 
 const props = defineProps({

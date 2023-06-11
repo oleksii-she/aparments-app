@@ -4,20 +4,24 @@ import { useRouter } from 'vue-router'
 import Header from './components/header.vue'
 import Logo from './components/logo.vue'
 import Footer from './components/footer.vue'
-import { useAuthStore, appStore } from '@/stores'
+// import ReserveMessage from '@/components/reserveMessage/reserveMessage.vue'
+import { useAuthStore, appStore,useUserStore } from '@/stores'
 import BurgerBtn from './components/burgerBtn.vue'
 import Sidebar from './components/sidebar.vue'
 import NavMenu from './components/navMenu.vue'
 import { useScreenSize } from './utils/useScreenSize'
 import { onMounted, watchEffect } from 'vue'
+// const userStore = useUserStore()
 const router = useRouter()
 const authStore = useAuthStore()
 const store = appStore()
 
 
 
+
 onMounted(() => {
-  watchEffect(() => {
+  watchEffect( async() => {
+    // await userStore.fetchUserReserve(authStore.id)
     if (authStore.token) {
       authStore.current()
     }
@@ -36,6 +40,8 @@ const logout = async () => {
     console.log(error.message)
   }
 }
+
+
 </script>
 
 <template>
@@ -59,7 +65,9 @@ const logout = async () => {
       </Header>
     </header>
     <div class="content">
+      <!-- <ReserveMessage v-if="userStore.totalReservePost"/> -->
       <RouterView />
+
     </div>
 
     <Footer />
@@ -102,4 +110,5 @@ const logout = async () => {
     transition: cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 }
+
 </style>

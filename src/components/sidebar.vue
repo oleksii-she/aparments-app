@@ -14,34 +14,6 @@ defineProps({
 <template lang="">
   <div class="sidebar">
     <NavMenu :isAuth="isAuth" />
-    <!-- <nav class="nav-menu" v-if="!isAuth">
-      <RouterLink :class="{ nav__link: true, active_link: route.path === '/login' }" to="/login">
-        Вхід
-      </RouterLink>
-
-      <RouterLink
-        :class="{ nav__link: true, active_link: route.path === '/registration' }"
-        to="/registration"
-      >
-        Реєстрація
-      </RouterLink>
-    </nav>
-    <nav class="nav-menu" v-else>
-      <RouterLink
-        :class="{ nav__link: true, active_link: route.path === '/myaccount/' }"
-        to="/myaccount"
-      >
-        Особистий кабінет
-      </RouterLink>
-
-      <RouterLink
-        :class="{ nav__link: true, active_link: route.path === '/post-new-add' }"
-        to="/post-new-add"
-        @click="store.toggleOpen"
-      >
-        Дати оголошення
-      </RouterLink>
-    </nav> -->
   </div>
 </template>
 

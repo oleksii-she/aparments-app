@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
 import MoonLoader from 'vue-spinner/src/MoonLoader.vue'
-import { defineProps } from 'vue'
+
 
 const props = defineProps(
   {

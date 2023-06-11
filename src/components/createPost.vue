@@ -322,7 +322,7 @@ const hideModalRemove = ()=>{
         </div>
         <UInput
           v-model="createPost.description"
-          placeholder="Опишіть апартаменти"
+          placeholder="Describe the apartments"
           type="textarea"
           class="uinput"
         >

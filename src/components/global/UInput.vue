@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineEmits, defineProps } from 'vue'
+import { ref, watch } from 'vue'
 import { vMask } from '@opentf/vue-input-mask'
 const emits = defineEmits(['update:modelValue', 'update:isValid'])
 
@@ -42,6 +42,7 @@ const isValid = ref(props.isValid) // declare isValid as a ref variable
 
 watch(value, () => {
   validate() // call validate function to update isValid
+
   if (props.type !== 'number') {
     if (value.value.trim()) {
       emits('update:isValid', isValid.value)
@@ -54,6 +55,7 @@ function validate() {
   if (props.defaultValidate) {
     return
   }
+
   if (!value.value ) {
     isValid.value = false // update the value of isValid
     // emit update event
@@ -121,7 +123,7 @@ const handleInput = (e) => {
       v-model="value"
       class="textarea"
     ></textarea>
-    <p class="warning__text" v-if="!isValid.value">
+    <p  class="warning__text" v-if="!isValid">
       {{ validate() }}
     </p>
   </label>

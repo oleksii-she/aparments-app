@@ -40,7 +40,6 @@ export const useAuthStore = defineStore('auth', {
 
     async login(userData) {
       try {
-        console.log('data', userData)
         const response = await loginUser(userData)
         this.token = response.token
         this.isAuth = true
@@ -71,10 +70,13 @@ export const useAuthStore = defineStore('auth', {
         console.log(error.message)
         this.isAuth = false
         this.token=''
+        this.email = ''
+        this.phone = ''
         this.statusError = error.message
 
         if (error.response && typeof error.response === 'object' && error.response.data) {
           this.token = ''
+          this.phone = ''
           throw new Error(error.response.data.message)
           
         } else {
@@ -89,6 +91,7 @@ export const useAuthStore = defineStore('auth', {
         this.id = ''
         this.name = ''
         this.email = ''
+        this.phone = ''
         this.token = ''
         this.isAuth = false
       } catch (error) {

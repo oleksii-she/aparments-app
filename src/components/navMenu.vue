@@ -17,7 +17,7 @@ watchEffect(()=>{
  
 })
 
-const noClickToogleSidebar = () => {
+const noClickToggleSidebar = () => {
   if (store.isOpen) {
     // isBodyOverflowHidden.value = true;
     return store.toggleOpen()
@@ -31,41 +31,49 @@ const noClickToogleSidebar = () => {
     <RouterLink
       :class="{ nav__link: true, active_link: route.path === '/login' }"
       to="/login"
-      @click="noClickToogleSidebar"
+      @click="noClickToggleSidebar"
     >
-      Вхід
+      Login
     </RouterLink>
     <span style="color: #ffffff">/</span>
     <RouterLink
       :class="{ nav__link: true, active_link: route.path === '/registration' }"
       to="/registration"
-      @click="noClickToogleSidebar"
+      @click="noClickToggleSidebar"
     >
-      Реєстрація
+      Registration
     </RouterLink>
   </nav>
   <nav v-else class="nav-menu">
     <RouterLink
       :class="{ nav__link: true, active_link: route.path === '/myaccount/' }"
       to="/myaccount"
-      @click="noClickToogleSidebar"
+      @click="noClickToggleSidebar"
     >
-      Особистий кабінет
+    Personal office
     </RouterLink>
     <span style="color: #ffffff">/</span>
     <RouterLink
       :class="{ nav__link: true, active_link: route.path === '/post-new-add' }"
       to="/post-new-add"
-      @click="noClickToogleSidebar"
+      @click="noClickToggleSidebar"
     >
-      Дати оголошення
+      Create advertisement
+    </RouterLink>
+    <span style="color: #ffffff">/</span>
+    <RouterLink
+      :class="{ nav__link: true, active_link: route.path === '/reserved' }"
+      to="/myaccount/reserved"
+      @click="noClickToggleSidebar"
+    >
+    Reserved
     </RouterLink>
   </nav>
 </template>
 
 <style scoped lang="scss">
 .nav-menu {
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     padding-top: 80px;
     display: flex;
     flex-direction: column;
@@ -73,6 +81,7 @@ const noClickToogleSidebar = () => {
     align-items: center;
     gap: 20px;
   }
+
 }
 .nav__link {
   color: #ffffff;
@@ -83,9 +92,10 @@ const noClickToogleSidebar = () => {
   &:hover {
     color: $activeColor;
   }
+color: $main-color;
+  @media screen and (min-width: 768px) {
+    color: $background;
 
-  @media screen and (max-width: 768px) {
-    color: $main-color;
   }
 }
 

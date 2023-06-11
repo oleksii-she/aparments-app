@@ -8,6 +8,7 @@ import Modal from '../global/modal.vue'
 import { useRouter } from 'vue-router'
 import URating from '../global/URating.vue'
 import AddRating from '../AddRating.vue'
+import Reserve from '../addReserve.vue'
 
 const props = defineProps({
   apartment: { type: Object, required: true },
@@ -30,6 +31,7 @@ const toggleModalRemove = ref(false)
 const removeToggleComment = ref(false)
 const loading = ref(false)
 const isVote = ref(false)
+const toggleReserve = ref(false)
 
 watchEffect(() => {
   if (id !== props.apartment.owner) {
@@ -84,6 +86,9 @@ const onModal = () => {
 const hideDialog = () => {
   toggleModal.value = !toggleModal.value
 }
+const hideReserve = () => {
+  toggleReserve.value = !toggleReserve.value
+}
 const hideModalRemove = () => {
   toggleModalRemove.value = !toggleModalRemove.value
 }
@@ -134,11 +139,16 @@ const roundedRating = Math.round(props.apartment.rating)
           </li>
         </ul>
       </div>
-<div class="description">
-  <p class="description__text">{{apartment.description}}</p>
-</div>
+      <div class="description">
+        <p class="description__text">{{ apartment.description }}</p>
+      </div>
       <div class="button-box">
-        <UButton v-if="id !== apartment.owner" class="button-box__button">Reserve</UButton>
+        <UButton
+          v-if="id !== apartment.owner"
+          class="button-box__button"
+          @click="toggleReserve = !toggleReserve"
+          >Reserve</UButton
+        >
         <UButton v-else class="button-box__button" @click="toggleModalRemove = true"
           >Remove</UButton
         >
@@ -189,7 +199,12 @@ const roundedRating = Math.round(props.apartment.rating)
               <button v-if="item.comment.length > 70" @click="toggleReadMore">
                 {{ !toggle ? 'Читати далі' : 'cкоротити' }}
               </button>
-              <button @click="deleteComment(item._id)" v-if="!removeToggleComment && id === apartment.owner ">Remove</button>
+              <button
+                @click="deleteComment(item._id)"
+                v-if="!removeToggleComment && id === apartment.owner"
+              >
+                Remove
+              </button>
             </div>
           </div>
         </div>
@@ -215,6 +230,9 @@ const roundedRating = Math.round(props.apartment.rating)
         </div>
         <ULoader :loading="loading" />
       </Modal>
+      <Modal v-if="toggleReserve" :toggleModal="toggleReserve" :hideDialog="hideReserve"
+        ><Reserve :id="apartment._id" :hideReserve="hideReserve"
+      /></Modal>
     </div>
   </div>
 </template>
@@ -280,7 +298,7 @@ const roundedRating = Math.round(props.apartment.rating)
 .comments-wrapper {
   max-height: 389px;
   overflow: auto;
-  margin-bottom: 21px
+  margin-bottom: 21px;
 }
 .heading {
   @media screen and (min-width: 768px) {
@@ -352,7 +370,6 @@ const roundedRating = Math.round(props.apartment.rating)
     width: 350px;
     padding: 20px;
 
-
     @media screen and (min-width: 768px) {
       display: flex;
       width: 600px;
@@ -361,11 +378,8 @@ const roundedRating = Math.round(props.apartment.rating)
       align-items: center;
       flex-direction: row;
       column-gap: 30px;
-
     }
   }
-
-  
 
   &__text {
     font-size: 20px;
@@ -379,14 +393,14 @@ const roundedRating = Math.round(props.apartment.rating)
   }
 }
 
-.description{
+.description {
   width: 350px;
   text-align: left;
   padding: 10px;
 
   @media screen and (min-width: 768px) {
     width: 600px;
-    }
+  }
   &__description {
     @media screen and (min-width: 768px) {
       font-size: 16px;
@@ -407,9 +421,8 @@ const roundedRating = Math.round(props.apartment.rating)
 .comments {
   margin-bottom: 8px;
   @media screen and (max-width: 768px) {
-width: 350px;
+    width: 350px;
   }
-
 }
 .avatar-box {
   display: flex;
