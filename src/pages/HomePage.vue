@@ -2,19 +2,19 @@
 // import VPagination from '@hennge/vue3-pagination'
 import { ref, watchEffect, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useApiApartmentsStore,useAuthStore } from '@/stores'
+import { useApiApartmentsStore, useAuthStore } from '@/stores'
 import ApartmentList from '@/components/apartment/apartmentList.vue'
 import ApartmentsItem from '@/components/apartment/apartmentItem.vue'
 import Pagination from '../components/global/pagination.vue'
 import { allCountries } from '../services/apiOther'
-import Modal from'../components/global/modal.vue'
-import PhoneWarning from'../components/phoneWarning.vue'
+import Modal from '../components/global/modal.vue'
+import PhoneWarning from '../components/phoneWarning.vue'
 
 const apiStore = useApiApartmentsStore()
 const route = useRoute()
 const router = useRouter()
 const perPage = 9
-const authStore=useAuthStore()
+const authStore = useAuthStore()
 
 const selectedCountry = ref(null)
 const selectedPrice = ref(null)
@@ -25,9 +25,6 @@ const phoneWarningToggle = ref(false)
 let renderApartmentHandler = false
 
 watchEffect(async () => {
-
- 
-
   router.push({ query: { ...route.query, page: page.value } })
   await apiStore.fetchApartments(page.value, selectedCountry.value)
 
@@ -37,28 +34,24 @@ watchEffect(async () => {
 
   const fetchCountries = await allCountries()
   countries.value = fetchCountries.data.countries
-
-
- 
 })
 
-watchEffect(async ()=>{
-  const {token} = route.query
+watchEffect(async () => {
+  const { token } = route.query
   if (token) {
     await authStore.current(token)
     router.push({ name: 'apartments' })
   }
-  phoneWarningToggle.value = false;
+  phoneWarningToggle.value = false
   setTimeout(() => {
-    if (authStore.isAuth ) {
-    if (!authStore.phone && phoneWarningToggle.value === false) {
-  phoneWarningToggle.value = true;
-} else if (authStore.phone && phoneWarningToggle.value === true) {
-  phoneWarningToggle.value = false;
-}
-  }
-    }, 2000)
-
+    if (authStore.isAuth) {
+      if (!authStore.phone && phoneWarningToggle.value === false) {
+        phoneWarningToggle.value = true
+      } else if (authStore.phone && phoneWarningToggle.value === true) {
+        phoneWarningToggle.value = false
+      }
+    }
+  }, 2000)
 })
 watch(selectedPrice, async () => {
   if (selectedPrice.value < 0) {
@@ -79,9 +72,8 @@ watch(selectedPrice, async () => {
     <section class="home-page">
       <div class="container">
         <Modal v-if="phoneWarningToggle" :toggleModal="phoneWarningToggle">
-          <PhoneWarning  @update:value="phoneWarningToggle.value = $event"   />
-
-</Modal>
+          <PhoneWarning @update:value="phoneWarningToggle.value = $event" />
+        </Modal>
 
         <div class="select-wrapper">
           <USelect
@@ -118,7 +110,7 @@ watch(selectedPrice, async () => {
           </ApartmentList>
         </div>
         <Pagination
-          v-if="apiStore.apartments.length > 7"
+          v-if="apiStore.totalPosts > 9 && !apiStore.loading"
           class="paginate"
           v-model="page"
           :perPage="perPage"

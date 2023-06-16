@@ -37,8 +37,6 @@ watchEffect(() => {
     const number = formatPhoneNumber(authStore.phone)
     userValue.phone = number
   }
-
-
 })
 
 const changeUpdateUser = (e) => {
@@ -75,7 +73,6 @@ const updateValue = async () => {
     } else {
       console.log(error.message)
     }
-
   }
 }
 </script>
@@ -166,7 +163,7 @@ const updateValue = async () => {
           </div>
         </div>
         <Pagination
-          v-if="userStore.apartments.length > 7"
+          v-if="userStore.totalPosts > 9 && !userStore.loading"
           class="paginate"
           v-model="page"
           :perPage="perPage"
