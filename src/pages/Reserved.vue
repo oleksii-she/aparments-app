@@ -19,6 +19,7 @@ const reserveInfo = ref(null)
 const reservedListToggle = ref(false)
 const { isMobile } = useScreenSize()
 const reservedToggle = ref(null)
+const mobToggleInfo = ref(false)
 
 watchEffect(async () => {
   await reserversStore.fetchGetAllReserve()
@@ -64,6 +65,9 @@ const handlerIdGet = (id) => {
   selectedReserveId.value = id
 
   reserversStore.reserversIdInfo(paramsId)
+  if (id) {
+    mobToggleInfo.value = true
+  }
 }
 
 const updateReserve = async (id) => {
@@ -80,15 +84,49 @@ const updateReserve = async (id) => {
 <template>
   <div class="container">
     <div class="reserved-wrapper reserved-mobile" v-if="isMobile">
-      <h2 style="text-align: center; margin-bottom: 20px">Reserved</h2>
       <ULoader :loading="reserversStore.loading" />
-      <ReserveMessageList
-        :reserves="reserversStore.reserves"
-        :hideModalToggle="hideModalToggle"
-        :handlerId="handlerId"
-      >
-        <div v-if="reserversStore.reserves.length" v-observe-visibility="visibilityChanged"></div
-      ></ReserveMessageList>
+      <div v-if="!mobToggleInfo">
+        <div v-if="reservedListToggle" class="reserved-box">
+          <UButton style="width: 150px; height: 50px" @click="reservedListToggle = false"
+            >Reserved</UButton
+          >
+          <h2 style="text-align: center; margin-bottom: 20px">In reserve</h2>
+          <ReserveMessageList
+            :reserves="reserversStore.reservesReserved"
+            :hideModalToggle="hideModalToggle"
+            :handlerIdGet="handlerIdGet"
+          >
+            <div
+              v-if="reserversStore.reserves.length"
+              v-observe-visibility="visibilityChanged"
+            ></div
+          ></ReserveMessageList>
+        </div>
+        <div v-else class="reserved-box">
+          <UButton style="width: 150px; height: 50px" @click="reservedListToggle = true"
+            >In reserve</UButton
+          >
+          <h2 style="text-align: center; margin-bottom: 20px">Reserved</h2>
+          <ReserveMessageList
+            :reserves="reserversStore.reserves"
+            :hideModalToggle="hideModalToggle"
+            :handlerIdGet="handlerIdGet"
+          >
+            <div
+              v-if="reserversStore.reserves.length"
+              v-observe-visibility="visibilityChanged"
+            ></div
+          ></ReserveMessageList>
+        </div>
+      </div>
+
+      <div class="reserved-wrapper__info" v-else>
+        <button @click="mobToggleInfo = false">назад</button>
+        <ReserveMessageInfo
+          :reserveInfo="reserversStore.reserveId"
+          :updateReserve="updateReserve"
+        />
+      </div>
     </div>
 
     <div class="reserved-wrapper" v-else>
@@ -149,10 +187,21 @@ const updateReserve = async (id) => {
   align-items: center;
   row-gap: 23px;
 
-  border-right: 3px solid rgb(216, 223, 224);
+  @media screen and (min-width: 768px) {
+    border-right: 3px solid rgb(216, 223, 224);
+    height: calc(100vh - 100px);
+  }
+}
+
+.button-toggle {
+  width: 150px;
+  height: 50px;
 }
 
 .reserved-mobile {
   flex-direction: column;
+}
+.reserved-wrapper__info {
+  padding-top: 35px;
 }
 </style>

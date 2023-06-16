@@ -64,14 +64,13 @@ const showReservedInfo = (id) => {
   row-gap: 10px;
 
   width: 337px;
-
-  max-height: calc(100vh - 19vh);
+  /* max-height: calc(100vh - 40vh); */
   overflow: auto;
   margin: 0 auto;
   padding: 0;
 
   @media screen and (min-width: 768px) {
-    max-height: calc(100vh - 124px);
+    max-height: calc(100vh - 19vh);
     overflow: auto;
   }
 }
