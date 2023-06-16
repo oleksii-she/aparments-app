@@ -2,7 +2,7 @@
 <script setup>
 import { useReserversStore, useApiApartmentsStore } from '@/stores'
 import { ref, watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ReserveMessageList from '@/components/reserveMessage/reserveMessageList.vue'
 import { useScreenSize } from '@/utils/useScreenSize'
 import ULoader from '../components/global/ULoader.vue'
@@ -28,7 +28,7 @@ watchEffect(async () => {
     await reserversStore.fetchGetAllReserve(page.value)
   }
 })
-
+const router = useRouter()
 watchEffect(async () => {
   let id = selectedReserveId.value
   if (!id) {
@@ -40,9 +40,6 @@ watchEffect(async () => {
   const findId = reserversStore.reservesReserved.find((el) => el._id === paramsId)
 
   if (findId) {
-    console.log('====================================')
-    console.log(findId)
-    console.log('====================================')
     reservedListToggle.value = true
   }
 })
@@ -85,6 +82,11 @@ const updateReserve = async (id) => {
     console.log(error.message)
   }
 }
+
+const goBack = () => {
+  mobToggleInfo.value = false
+  router.push('/myaccount/reserved')
+}
 </script>
 <template>
   <div class="container">
@@ -126,8 +128,7 @@ const updateReserve = async (id) => {
       </div>
 
       <div class="reserved-wrapper__info" v-else>
-        <!-- <button @click="mobToggleInfo = false">назад</button> -->
-        <BackBtn class="button-back" @click="mobToggleInfo = false">back</BackBtn>
+        <BackBtn class="button-back" @click="goBack">back</BackBtn>
         <ReserveMessageInfo
           :reserveInfo="reserversStore.reserveId"
           :updateReserve="updateReserve"
@@ -151,7 +152,7 @@ const updateReserve = async (id) => {
         ></ReserveMessageList>
       </div>
       <div v-else class="reserved-box">
-        <UButton style="width: 250px" @click="reservedListToggle = true">In reserve</UButton>
+        <UButton style="width: 250px" @click="goBack">In reserve</UButton>
         <h2>Reserved</h2>
         <ReserveMessageList
           :reserves="reserversStore.reserves"

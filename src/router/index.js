@@ -6,8 +6,7 @@ import { useAuthStore } from '../stores/useStores/useAuthStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {  path: '/',
-    redirect: '/apartments'},
+    { path: '/', redirect: '/apartments' },
     {
       path: '/apartments',
       name: 'apartments',
@@ -65,7 +64,8 @@ const router = createRouter({
       component: () => import('../pages/UserPage.vue'),
       name: 'user-page',
       meta: { requiresAuth: true }
-    },    {
+    },
+    {
       path: '/myaccount/reserved/',
 
       component: () => import('../pages/Reserved.vue'),
@@ -79,9 +79,6 @@ const router = createRouter({
       name: 'reserved-info',
       meta: { requiresAuth: true }
     }
-
-
- 
   ]
 })
 
