@@ -2,11 +2,14 @@
 // import { useApiApartmentsStore } from '@/stores'
 import { useRoute, useRouter } from 'vue-router'
 // import ReservedInfo from '../../pages/ReservedInfo.vue'
-// import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import dayjs from 'dayjs'
 
-// const route = useRoute()
+const route = useRoute()
 const router = useRouter()
+
+// const { id: idParams } = route.params
+const idParams = ref(null)
 
 const props = defineProps({
   reserves: Array,
@@ -16,6 +19,9 @@ const props = defineProps({
   }
 })
 
+watchEffect(() => {
+  idParams.value = route.params.id
+})
 const formatDateTime = (datetime) => {
   const now = dayjs()
   const backendDateTime = dayjs(datetime)
@@ -37,19 +43,21 @@ const showReservedInfo = (id) => {
   <div class="wrapper">
     <ul class="reserve-list">
       <li class="reserve-list__item" v-for="reserve in reserves" :key="reserve._id">
-        <div class="reserve">
+        <div
+          class="reserve"
+          @click="showReservedInfo(reserve._id)"
+          :class="{ 'reserve-active': idParams === reserve._id }"
+        >
           <div class="reserve__top">
             <p class="reserve__title">{{ reserve.name }}</p>
             <p>{{ formatDateTime(reserve.updatedAt) }}</p>
           </div>
-          <p>{{ reserve._id }}</p>
+
           <p v-if="reserve.apartmentName">{{ reserve.apartmentName }}</p>
           <p class="reserve__description">{{ reserve.description }}</p>
-          <button @click="showReservedInfo(reserve._id)">Show Info</button>
         </div>
       </li>
       <slot />
-      <!-- <div v-if="reserves.length" v-observe-visibility="visibilityChanged()"> ++++++visibilityChanged++++++ </div> -->
     </ul>
   </div>
 </template>
@@ -64,13 +72,13 @@ const showReservedInfo = (id) => {
   row-gap: 10px;
 
   width: 337px;
-  /* max-height: calc(100vh - 40vh); */
+
   overflow: auto;
   margin: 0 auto;
   padding: 0;
 
   @media screen and (min-width: 768px) {
-    max-height: calc(100vh - 19vh);
+    max-height: calc(100vh - 20vh);
     overflow: auto;
   }
 }
@@ -79,6 +87,13 @@ const showReservedInfo = (id) => {
   box-shadow: 7px 4px 14px rgba(49, 21, 4, 0.07);
   border-radius: 20px;
   padding: 20px;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: $reviews;
+    transition: $transition;
+  }
   &__title {
     margin-bottom: 12px;
   }
@@ -100,5 +115,9 @@ const showReservedInfo = (id) => {
     font-size: 16px;
     line-height: calc(20 / 16);
   }
+}
+
+.reserve-active {
+  background-color: $reviews;
 }
 </style>

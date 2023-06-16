@@ -20,6 +20,7 @@ const reservedListToggle = ref(false)
 const { isMobile } = useScreenSize()
 const reservedToggle = ref(null)
 const mobToggleInfo = ref(false)
+const activeIdLink = ref('')
 
 watchEffect(async () => {
   await reserversStore.fetchGetAllReserve()
@@ -35,11 +36,15 @@ watchEffect(async () => {
   }
 
   reserversStore.reserversIdInfo(id)
-  // console.log('====================================')
-  // console.log(reserversStore.reserveId)
-  // console.log('====================================')
-  // const response = await reserversStore.fetchGetReserversIdInfo(id)
-  // reserveInfo.value = reserversStore.reserveId
+
+  const findId = reserversStore.reservesReserved.find((el) => el._id === paramsId)
+
+  if (findId) {
+    console.log('====================================')
+    console.log(findId)
+    console.log('====================================')
+    reservedListToggle.value = true
+  }
 })
 
 const hideModalToggle = () => {
@@ -63,8 +68,8 @@ const visibilityChanged = (isVisible) => {
 
 const handlerIdGet = (id) => {
   selectedReserveId.value = id
-
   reserversStore.reserversIdInfo(paramsId)
+
   if (id) {
     mobToggleInfo.value = true
   }
@@ -83,8 +88,8 @@ const updateReserve = async (id) => {
 </script>
 <template>
   <div class="container">
+    <ULoader :loading="reserversStore.loading" />
     <div class="reserved-wrapper reserved-mobile" v-if="isMobile">
-      <ULoader :loading="reserversStore.loading" />
       <div v-if="!mobToggleInfo">
         <div v-if="reservedListToggle" class="reserved-box">
           <UButton style="width: 150px; height: 50px" @click="reservedListToggle = false"
