@@ -4,7 +4,8 @@ import {
   apartmentsId,
   apartmentDelleteId,
   addComment,
-  commentDelleteId
+  commentDelleteId,
+  updateReserve
 } from '../../services/apiApartments'
 import { defineStore } from 'pinia'
 import { createToaster } from '@meforma/vue-toaster'
@@ -47,6 +48,9 @@ export const useApiApartmentsStore = defineStore({
     },
     async fetchApartmentsId(id) {
       try {
+        if (!id) {
+          return
+        }
         this.loading = true
         const response = await apartmentsId(id)
         this.comments = response.data.comments
@@ -104,6 +108,20 @@ export const useApiApartmentsStore = defineStore({
         toaster.error(error.message)
       } finally {
         this.loading = false
+      }
+    },
+
+    async updateApartmentReserved(id, formData) {
+      try {
+        this.loading = true
+        const response = await updateReserve(id, formData)
+        this.loading = false
+        return response.data
+        // this.apartments = this.apartments.filter((el) => el._id !== response.data.result._id)
+        // this.apartments.push(response.data.result)
+      } catch (error) {
+        console.log(error.message)
+        toaster.error(error.message)
       }
     }
   }

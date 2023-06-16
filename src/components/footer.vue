@@ -9,6 +9,6 @@
 <style scoped lang="scss">
 .footer {
   background-color: $main-color;
-  height: 60px;
+  height: 30px;
 }
 </style>

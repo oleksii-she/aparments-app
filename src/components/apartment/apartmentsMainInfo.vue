@@ -15,6 +15,10 @@ const props = defineProps({
   someLocalProperty: {
     type: Number,
     default: 2
+  },
+  updateReserve: {
+    type: Function,
+    default: () => {}
   }
 })
 const toaster = createToaster({ position: 'top' })
@@ -142,15 +146,25 @@ const roundedRating = Math.round(props.apartment.rating)
       <div class="description">
         <p class="description__text">{{ apartment.description }}</p>
       </div>
-      <div class="button-box">
+      <div class="button-box" v-if="!apartment.reserved">
         <UButton
           v-if="id !== apartment.owner"
           class="button-box__button"
           @click="toggleReserve = !toggleReserve"
           >Reserve</UButton
         >
+
         <UButton v-else class="button-box__button" @click="toggleModalRemove = true"
           >Remove</UButton
+        >
+      </div>
+      <div class="button-box" v-else>
+        <UButton style="background-color: silver" v-if="id !== apartment.owner" disabled="true"
+          >Reserved</UButton
+        >
+
+        <UButton v-else class="button-box__button" @click="updateReserve(apartment._id)"
+          >remove reserve</UButton
         >
       </div>
     </div>
@@ -231,7 +245,11 @@ const roundedRating = Math.round(props.apartment.rating)
         <ULoader :loading="loading" />
       </Modal>
       <Modal v-if="toggleReserve" :toggleModal="toggleReserve" :hideDialog="hideReserve"
-        ><Reserve :id="apartment._id" :hideReserve="hideReserve"
+        ><Reserve
+          :id="apartment._id"
+          :price="apartment.price"
+          :longPrice="apartment.longStayPrice"
+          :hideReserve="hideReserve"
       /></Modal>
     </div>
   </div>

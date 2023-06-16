@@ -2,7 +2,7 @@
 
 defineProps({
   apartments: {
-    type: Array,
+    type: Object,
     required: true
   }
 })

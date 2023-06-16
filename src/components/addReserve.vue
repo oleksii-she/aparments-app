@@ -1,28 +1,59 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup>
-import { reactive, ref } from 'vue'
-import { useUserStore } from '@/stores'
+import { reactive, ref, watchEffect } from 'vue'
+import { useReserversStore } from '@/stores'
 import { convertPhoneNumber } from '../utils/formatPhoneNumber'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import { addDays } from 'date-fns'
+import dayjs from 'dayjs'
 
 const props = defineProps({
   id: {
     type: String
   },
+  price: Number,
+  longPrice: Number,
   hideReserve: {
     type: Function,
     default: () => {}
   }
 })
-const userStore = useUserStore()
+
+const reserversStore = useReserversStore()
 const data = reactive({
   name: '',
   phone: '',
   email: '',
-  description: ''
+  description: '',
+  sum: 0,
+  startDate: '',
+  endDate: '',
+  numberOfDays: 0
 })
 
 const thankToggle = ref(false)
 
+const date = ref([new Date(), addDays(new Date(), 1)])
+
+watchEffect(() => {
+  let startDate = date.value[0]
+  let endDate = date.value[1]
+
+  // Віднімаємо одну дату від іншої для отримання різниці у мілісекундах
+  const timeDifference = endDate.getTime() - startDate.getTime()
+
+  // Конвертуємо різницю у мілісекундах в кількість днів
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+
+  if (daysDifference < 3) {
+    data.sum = daysDifference * props.price
+  } else {
+    data.sum = daysDifference * props.longPrice
+  }
+  data.numberOfDays = daysDifference
+  data.startDate = dayjs(startDate).format('YYYY.MM.DD')
+  data.endDate = dayjs(endDate).format('YYYY.MM.DD')
+})
 const onSubmit = async () => {
   try {
     const phone = convertPhoneNumber(data.phone)
@@ -31,13 +62,17 @@ const onSubmit = async () => {
       name: data.name,
       email: data.email,
       description: data.description,
-      phone
+      phone,
+      sum: data.sum,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      numberOfDays: data.numberOfDays
     }
 
     if (newReserve.name === '' || newReserve.email === '' || newReserve.phone.length < 10) {
-      return 
+      return
     }
-    await userStore.fetchAddReserve(props.id, newReserve)
+    await reserversStore.fetchAddReserve(props.id, newReserve)
 
     thankToggle.value = true
     setTimeout(() => {
@@ -62,6 +97,15 @@ const onSubmit = async () => {
       <UInput type="email" v-model="data.email">
         <p style="margin-bottom: 2px">Your email</p>
       </UInput>
+
+      <VueDatePicker
+        v-model="date"
+        multi-calendars
+        range
+        :partial-range="false"
+        :enable-time-picker="false"
+        :minDate="new Date()"
+      />
       <UInput
         :required="false"
         :isValid="true"
@@ -69,6 +113,7 @@ const onSubmit = async () => {
         type="textarea"
         v-model="data.description"
       />
+      <p>Price: {{ data.sum }}$</p>
       <UButton type="submit" style="margin: 0 auto">Reserve</UButton>
     </form>
     <h2 v-else>Thank you, we will contact you!</h2>

@@ -9,6 +9,7 @@ import Pagination from '../components/global/pagination.vue'
 import { allCountries } from '../services/apiOther'
 import Modal from'../components/global/modal.vue'
 import PhoneWarning from'../components/phoneWarning.vue'
+
 const apiStore = useApiApartmentsStore()
 const route = useRoute()
 const router = useRouter()

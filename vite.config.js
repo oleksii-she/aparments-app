@@ -12,9 +12,9 @@ export default defineConfig({
       }
     }
   },
-  base: "/apartments-app/",
+  base: '/apartments-app/',
   build: {
-    outDir: "build",
+    outDir: 'build'
   },
   resolve: {
     alias: {

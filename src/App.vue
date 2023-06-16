@@ -50,7 +50,7 @@ const logout = async () => {
       <Header>
         <div class="container">
           <div class="wrapper">
-            <router-link to="/apartments"> <Logo /></router-link>
+            <router-link to="/apartments/"> <Logo /></router-link>
             <BurgerBtn v-if="isMobile" />
             <NavMenu v-if="!isMobile" :isAuth="authStore.isAuth" />
             <Sidebar v-if="store.isOpen" :isAuth="authStore.isAuth" />
@@ -89,6 +89,7 @@ const logout = async () => {
 }
 .content {
   flex-grow: 2;
+  /* max-height: calc(100vh - 90px); */
 }
 .logout {
   background-color: transparent;

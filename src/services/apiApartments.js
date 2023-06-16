@@ -44,12 +44,11 @@ export const apartmentRating = async (id, index) => {
   return response.data
 }
 
-export const addReserve = async (id,data) => {
-  const response = await axiosInstance.post(`apartments/${id}/reserve`,data, {
+export const updateReserve = async (id, data) => {
+  const response = await axiosInstance.patch(`apartments/${id}/reserved`, data, {
     headers: {
       'Content-Type': 'application/json'
     }
   })
   return response.data
 }
-
