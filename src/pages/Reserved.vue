@@ -7,7 +7,7 @@ import ReserveMessageList from '@/components/reserveMessage/reserveMessageList.v
 import { useScreenSize } from '@/utils/useScreenSize'
 import ULoader from '../components/global/ULoader.vue'
 import ReserveMessageInfo from '../components/reserveMessage/reserveMessageInfo.vue'
-
+import BackBtn from '../components/global/BackBtn.vue'
 const route = useRoute()
 const { id: paramsId } = route.params
 const reserversStore = useReserversStore()
@@ -126,7 +126,8 @@ const updateReserve = async (id) => {
       </div>
 
       <div class="reserved-wrapper__info" v-else>
-        <button @click="mobToggleInfo = false">назад</button>
+        <!-- <button @click="mobToggleInfo = false">назад</button> -->
+        <BackBtn class="button-back" @click="mobToggleInfo = false">back</BackBtn>
         <ReserveMessageInfo
           :reserveInfo="reserversStore.reserveId"
           :updateReserve="updateReserve"
@@ -184,7 +185,13 @@ const updateReserve = async (id) => {
     width: 100%;
   }
 }
-
+.button-back {
+  @media screen and (max-width: 767px) {
+    position: absolute;
+    left: 0;
+    top: 10px;
+  }
+}
 .reserved-box {
   padding-top: 20px;
   display: flex;
@@ -204,6 +211,7 @@ const updateReserve = async (id) => {
 }
 
 .reserved-mobile {
+  position: relative;
   flex-direction: column;
 }
 .reserved-wrapper__info {

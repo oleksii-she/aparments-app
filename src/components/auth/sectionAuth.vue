@@ -16,7 +16,7 @@
   background: url('../../assets/images/login.jpg') no-repeat;
   background-size: cover;
   background-position: center;
-  min-height: calc(100vh - 124px);
+  min-height: calc(100vh - 94px);
 
   z-index: 1;
 

@@ -1,6 +1,7 @@
 <script setup>
 import dayjs from 'dayjs'
 import { watchEffect, ref } from 'vue'
+
 // import { useApiApartmentsStore } from '@/stores'
 
 // const apartmentsStore = useApiApartmentsStore()
@@ -15,6 +16,7 @@ const props = defineProps({
 })
 
 const reservedToggle = ref(null)
+
 watchEffect(async () => {
   if (props.reserveInfo && typeof props.reserveInfo.reserved !== 'undefined') {
     const reserved = props.reserveInfo.reserved
@@ -34,9 +36,6 @@ const formatDateTime = (datetime) => {
 }
 
 const onReserve = (id) => {
-  if (reservedToggle.value) {
-    return
-  }
   reservedToggle.value = true
   props.updateReserve(id)
 }

@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores'
 import { useApiApartmentsStore } from '@/stores/useStores/useApartmentStore'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import Modal from '../global/modal.vue'
+import BackBtn from '../global/BackBtn.vue'
 import { useRouter } from 'vue-router'
 import URating from '../global/URating.vue'
 import AddRating from '../AddRating.vue'
@@ -108,12 +109,25 @@ const apartmentDellete = async (id) => {
   }
 }
 
+const onReserve = () => {
+  if (!isAuth) {
+    router.push({ name: 'login' })
+    return
+  }
+  toggleReserve.value = !toggleReserve.value
+}
+
 const images = [...props.apartment.images, props.apartment.coverImage]
+
+const goBack = () => {
+  router.go(-1)
+}
 
 const roundedRating = Math.round(props.apartment.rating)
 </script>
 <template>
   <div class="review-wrapper">
+    <BackBtn class="button-back" @click="goBack">back</BackBtn>
     <div class="review-box">
       <div class="heading">
         <h2 class="heading__title">{{ apartment.name }}</h2>
@@ -147,10 +161,7 @@ const roundedRating = Math.round(props.apartment.rating)
         <p class="description__text">{{ apartment.description }}</p>
       </div>
       <div class="button-box" v-if="!apartment.reserved">
-        <UButton
-          v-if="id !== apartment.owner"
-          class="button-box__button"
-          @click="toggleReserve = !toggleReserve"
+        <UButton v-if="id !== apartment.owner" class="button-box__button" @click="onReserve"
           >Reserve</UButton
         >
 
@@ -211,7 +222,7 @@ const roundedRating = Math.round(props.apartment.rating)
               <p class="comment__text" v-if="!toggle">{{ item.comment.slice(0, 70) + '...' }}</p>
               <p class="comment__text" v-else>{{ item.comment }}</p>
               <button v-if="item.comment.length > 70" @click="toggleReadMore">
-                {{ !toggle ? 'Читати далі' : 'cкоротити' }}
+                {{ !toggle ? 'Read more' : 'shorten' }}
               </button>
               <button
                 @click="deleteComment(item._id)"
@@ -268,6 +279,13 @@ const roundedRating = Math.round(props.apartment.rating)
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 0;
+  }
+}
+
+.button-back {
+  @media screen and (max-width: 767px) {
+    position: absolute;
+    left: 0;
   }
 }
 .country-list {
