@@ -155,10 +155,11 @@ watch(selectedPrice, async () => {
   flex-direction: column-reverse;
 }
 .paginate {
-  /* margin-top: 8px; */
   justify-content: center;
+  margin-top: 8px;
 }
 .home-page {
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 </style>

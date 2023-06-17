@@ -7,16 +7,23 @@ defineProps({
   starLimit: {
     type: Number,
     default: 5
-  }
+  },
+  width: Number,
+  height: Number
 })
 </script>
 <template lang="">
   <div class="star-rating">
-    <svg class="icon" v-for="index in starLimit" :key="index">
+    <svg class="icon" v-for="index in starLimit" :key="index" :style="{ width, height }">
       <use xlink:href="../../assets/svg/sprite.svg#icon-star"></use>
     </svg>
     <div class="star-rating__colored">
-      <svg class="icon active-rating {" v-for="index in rating" :key="index">
+      <svg
+        class="icon active-rating {"
+        v-for="index in rating"
+        :key="index"
+        :style="{ width, height }"
+      >
         <use xlink:href="../../assets/svg/sprite.svg#icon-star"></use>
       </svg>
     </div>

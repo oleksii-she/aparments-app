@@ -4,13 +4,15 @@ import ULoader from './ULoader.vue'
 import USelect from './USelect.vue'
 import VueInputMask from './VueInputMask.vue'
 import UModal from './modal.vue'
+import URating from './URating.vue'
 const components = [
   { name: 'UInput', component: UInput },
   { name: 'UButton', component: UButton },
   { name: 'ULoader', component: ULoader },
   { name: 'USelect', component: USelect },
   { name: 'VueInputMask', component: VueInputMask },
-  { name: 'UModal', component: UModal }
+  { name: 'UModal', component: UModal },
+  { name: 'URating', component: URating }
 ]
 export default {
   install(app) {

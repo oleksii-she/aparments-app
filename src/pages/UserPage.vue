@@ -82,69 +82,74 @@ const updateValue = async () => {
     <section>
       <div class="container user-page">
         <div class="home-page__wrapper">
-          <div class="user">
-            <div class="wrapper">
-              <div v-if="!targetValue.name" class="user__text-wrapper">
-                <p class="user__text">і’мя: {{ userValue.name }}</p>
-                <button @click="targetValue.name = true" class="btn-edit">
-                  <svg class="btn-edit__icon">
-                    <use xlink:href="@/assets/svg/sprite.svg#icon-edit"></use>
-                  </svg>
-                </button>
+          <div class="user-wrapper">
+            <div class="user">
+              <div class="wrapper">
+                <div v-if="!targetValue.name" class="user__text-wrapper">
+                  <p class="user__text">і’мя: {{ userValue.name }}</p>
+                  <button @click="targetValue.name = true" class="btn-edit">
+                    <svg class="btn-edit__icon">
+                      <use xlink:href="@/assets/svg/sprite.svg#icon-edit"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div v-else class="user__text-wrapper">
+                  <label class="user__text">
+                    і’мя:
+                    <input
+                      class="user__input-rename"
+                      name="name"
+                      :value="userValue.name"
+                      @change="changeUpdateUser"
+                    />
+                  </label>
+                  <button @click="updateValue" class="btn-edit">
+                    <svg class="btn-edit__icon">
+                      <use xlink:href="@/assets/svg/sprite.svg#icon-confirm"></use>
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div v-else class="user__text-wrapper">
-                <label class="user__text">
-                  і’мя:
-                  <input
-                    class="user__input-rename"
-                    name="name"
-                    :value="userValue.name"
-                    @change="changeUpdateUser"
-                  />
-                </label>
-                <button @click="updateValue" class="btn-edit">
-                  <svg class="btn-edit__icon">
-                    <use xlink:href="@/assets/svg/sprite.svg#icon-confirm"></use>
-                  </svg>
-                </button>
+              <div class="user__text-wrapper">
+                <p class="user__text">E-mail: {{ authStore.email }}</p>
               </div>
-            </div>
-            <div class="user__text-wrapper">
-              <p class="user__text">E-mail: {{ authStore.email }}</p>
-            </div>
 
-            <div class="wrapper">
-              <div v-if="!targetValue.phone" class="user__text-wrapper">
-                <p class="user__text" v-if="userValue.phone">Телефон: {{ userValue.phone }}</p>
-                <p class="user__text" v-else>Телефон: +38(000)000-00-00</p>
-                <button @click="targetValue.phone = true" class="btn-edit">
-                  <svg class="btn-edit__icon">
-                    <use xlink:href="@/assets/svg/sprite.svg#icon-edit"></use>
-                  </svg>
-                </button>
+              <div class="wrapper">
+                <div v-if="!targetValue.phone" class="user__text-wrapper">
+                  <p class="user__text" v-if="userValue.phone">Телефон: {{ userValue.phone }}</p>
+                  <p class="user__text" v-else>Телефон: +38(000)000-00-00</p>
+                  <button @click="targetValue.phone = true" class="btn-edit">
+                    <svg class="btn-edit__icon">
+                      <use xlink:href="@/assets/svg/sprite.svg#icon-edit"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div v-else class="user__text-wrapper">
+                  <label class="user__text">
+                    Телефон:
+                    <input
+                      ref="phoneInput"
+                      v-mask="{ mask: '+38(0##)###-##-##' }"
+                      class="user__input-rename"
+                      type="tel"
+                      name="phone"
+                      :value="userValue.phone"
+                      @change="changeUpdateUser"
+                    />
+                  </label>
+                  <button @click="updateValue" class="btn-edit">
+                    <svg class="btn-edit__icon">
+                      <use xlink:href="@/assets/svg/sprite.svg#icon-confirm"></use>
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div v-else class="user__text-wrapper">
-                <label class="user__text">
-                  Телефон:
-                  <input
-                    ref="phoneInput"
-                    v-mask="{ mask: '+38(0##)###-##-##' }"
-                    class="user__input-rename"
-                    type="tel"
-                    name="phone"
-                    :value="userValue.phone"
-                    @change="changeUpdateUser"
-                  />
-                </label>
-                <button @click="updateValue" class="btn-edit">
-                  <svg class="btn-edit__icon">
-                    <use xlink:href="@/assets/svg/sprite.svg#icon-confirm"></use>
-                  </svg>
-                </button>
-              </div>
+            </div>
+            <div class="user-rating-box">
+              <h3>User rating</h3>
+              <URating :width="50" :height="50" />
             </div>
           </div>
-
           <div>
             <ULoader :loading="true" v-if="userStore.loading" />
             <ApartmentList :apartments="userStore.apartments">
@@ -195,12 +200,30 @@ const updateValue = async () => {
   justify-content: center;
 }
 
+.user-wrapper {
+  @media screen and (min-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+}
+
+.user-rating-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  @media screen and (min-width: 768px) {
+    margin-bottom: 0;
+  }
+}
 .user {
   display: block;
   padding: 8px;
   width: 282px;
   background-color: $reviews;
-
+  margin-bottom: 20px;
   @media screen and (min-width: 768px) {
     width: 300px;
     margin-bottom: 15px;
