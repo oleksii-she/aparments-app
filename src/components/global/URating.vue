@@ -12,6 +12,7 @@ defineProps({
   height: Number
 })
 </script>
+
 <template lang="">
   <div class="star-rating">
     <svg class="icon" v-for="index in starLimit" :key="index" :style="{ width, height }">

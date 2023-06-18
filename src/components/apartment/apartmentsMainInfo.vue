@@ -130,7 +130,6 @@ const images = [...props.apartment.images, props.apartment.coverImage]
 const goBack = () => {
   router.go(-1)
 }
-console.log(props.apartment)
 
 const roundedRating = (rating) => {
   return Math.round(rating)
@@ -195,9 +194,16 @@ const roundedRating = (rating) => {
       <div class="info-user">
         <div>
           <RouterLink
+            v-if="isAuth"
             class="user-link"
             :to="{ name: 'userId-info', params: { id: apartment.owner } }"
           >
+            <h2 class="info-user__title">Information about the owner:</h2>
+            <p class="user-text">Name: {{ apartment.user.user }}</p>
+            <p class="user-text">Tel: {{ apartment.user.phone }}</p>
+            <p class="user-text">E-mail: {{ apartment.user.email }}</p></RouterLink
+          >
+          <RouterLink v-else class="user-link" :to="{ name: 'login' }">
             <h2 class="info-user__title">Information about the owner:</h2>
             <p class="user-text">Name: {{ apartment.user.user }}</p>
             <p class="user-text">Tel: {{ apartment.user.phone }}</p>

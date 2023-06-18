@@ -37,8 +37,9 @@ watchEffect(async () => {
   if (routeId) {
     await userStore.fetchUserApartments(routeId, page.value)
 
-    const { user, phone, email } = userStore.apartments[0].user
-    userInfo.value = { user, phone, email }
+    const { user, phone, email, userRating } = userStore.apartments[2].user
+    const rating = Math.round(userRating)
+    userInfo.value = { user, phone, email, rating }
     routeIdValue.value = routeId
   } else {
     userStore.fetchUserApartments(id, page.value)
@@ -173,7 +174,8 @@ const updateValue = async () => {
             </div>
             <div class="user-rating-box">
               <h3>User rating</h3>
-              <URating :width="50" :height="50" />
+
+              <URating :width="50" :height="50" :rating="userInfo.rating" />
             </div>
           </div>
           <div>
