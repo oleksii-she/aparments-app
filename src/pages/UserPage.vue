@@ -27,11 +27,22 @@ const userValue = reactive({
   phone: ''
 })
 
-watchEffect(() => {
+const userInfo = ref({})
+const routeIdValue = ref(null)
+
+watchEffect(async () => {
   const { id } = authStore
   router.push({ query: { ...route.query, page: page.value } })
-  userStore.fetchUserApartments(id, page.value)
+  const routeId = route.params.id
+  if (routeId) {
+    await userStore.fetchUserApartments(routeId, page.value)
 
+    const { user, phone, email } = userStore.apartments[0].user
+    userInfo.value = { user, phone, email }
+    routeIdValue.value = routeId
+  } else {
+    userStore.fetchUserApartments(id, page.value)
+  }
   userValue.name = authStore.name
   if (authStore.phone) {
     const number = formatPhoneNumber(authStore.phone)
@@ -83,7 +94,7 @@ const updateValue = async () => {
       <div class="container user-page">
         <div class="home-page__wrapper">
           <div class="user-wrapper">
-            <div class="user">
+            <div class="user" v-if="!routeIdValue">
               <div class="wrapper">
                 <div v-if="!targetValue.name" class="user__text-wrapper">
                   <p class="user__text">і’мя: {{ userValue.name }}</p>
@@ -142,6 +153,21 @@ const updateValue = async () => {
                       <use xlink:href="@/assets/svg/sprite.svg#icon-confirm"></use>
                     </svg>
                   </button>
+                </div>
+              </div>
+            </div>
+            <div class="user" v-else>
+              <div class="wrapper">
+                <div class="user__text-wrapper">
+                  <p class="user__text">Name: {{ userInfo.user }}</p>
+                </div>
+
+                <div class="user__text-wrapper">
+                  <p class="user__text">Email: {{ userInfo.email }}</p>
+                </div>
+
+                <div class="user__text-wrapper">
+                  <p class="user__text">Phone: {{ formatPhoneNumber(userInfo.phone) }}</p>
                 </div>
               </div>
             </div>

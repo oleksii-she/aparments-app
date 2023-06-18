@@ -24,7 +24,6 @@ export const useApiApartmentsStore = defineStore({
   }),
   getters: {
     sortPrice: (state) => (price) => {
-      console.log(price)
       if (price) {
         return (state.filter = state.apartments.filter((el) => el.price >= price))
       } else {

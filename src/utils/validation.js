@@ -1,6 +1,4 @@
 export const validationName = (value) => {
-  console.log(value)
-
   if (value.length < 3) {
     return 'ім’я має бути більше ніж три букви'
   }

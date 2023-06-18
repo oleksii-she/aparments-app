@@ -1,12 +1,16 @@
 <script setup>
 import { ref } from 'vue'
-import { apartmentRating } from '../services/apiApartments'
+// import { apartmentRating } from '../services/apiApartments'
 const emits = defineEmits(['update:isVote'])
 const props = defineProps({
   //   rating: {
   //     type: Number,
   //     default: 0
   //   },
+  ratingVote: {
+    type: Function,
+    default: () => {}
+  },
   isVote: Boolean,
   id: String,
   starLimit: {
@@ -21,13 +25,12 @@ const currentRating = ref(0)
 const onClickRating = async (index) => {
   rating.value = index
 
-  const sds = await apartmentRating(props.id, index)
+  props.ratingVote(props.id, index)
+  // await apartmentRating(props.id, index)
   emits('update:isVote', true)
-  console.log(sds)
 }
 
 const onHoverRating = (index) => {
-  console.log(index)
   currentRating.value = index
 }
 </script>

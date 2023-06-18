@@ -5,6 +5,7 @@ export const userApartments = async (id, page) => {
   return response.data
 }
 
-
-
-
+export const userRating = async (id) => {
+  const response = await axiosInstance.get(`/users/${id}/rate`)
+  return response.data
+}

@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router'
 import URating from '../global/URating.vue'
 import AddRating from '../AddRating.vue'
 import Reserve from '../addReserve.vue'
-
+import { apartmentRating } from '../../services/apiApartments'
 const props = defineProps({
   apartment: { type: Object, required: true },
   someLocalProperty: {
@@ -36,8 +36,9 @@ const toggleModalRemove = ref(false)
 const removeToggleComment = ref(false)
 const loading = ref(false)
 const isVote = ref(false)
+const isLike = ref(false)
 const toggleReserve = ref(false)
-
+console.log(isLike)
 watchEffect(() => {
   if (id !== props.apartment.owner) {
     const userVoted = props.apartment.ratings.find((el) => el.user === id)
@@ -45,6 +46,13 @@ watchEffect(() => {
     if (userVoted) {
       isVote.value = true
     }
+  }
+
+  if (id !== props.apartment.owner) {
+    // const userVoted = props.apartment.user.usersRatings.find((el) => el.user === id)
+    // if (userVoted) {
+    //   isLike.value = true
+    // }
   }
 })
 const router = useRouter()
@@ -122,8 +130,12 @@ const images = [...props.apartment.images, props.apartment.coverImage]
 const goBack = () => {
   router.go(-1)
 }
+console.log(props.apartment)
 
-const roundedRating = Math.round(props.apartment.rating)
+const roundedRating = (rating) => {
+  return Math.round(rating)
+}
+// const roundedRating = Math.round(props.apartment.rating)
 </script>
 <template>
   <div class="review-wrapper">
@@ -131,7 +143,7 @@ const roundedRating = Math.round(props.apartment.rating)
     <div class="review-box">
       <div class="heading">
         <h2 class="heading__title">{{ apartment.name }}</h2>
-        <URating :rating="roundedRating" />
+        <URating :rating="roundedRating(apartment.rating)" />
       </div>
       <carousel :items-to-show="1" class="carousel">
         <slide v-for="image in images" :key="image">
@@ -181,10 +193,21 @@ const roundedRating = Math.round(props.apartment.rating)
     </div>
     <div class="info-wrapper">
       <div class="info-user">
-        <h2 class="info-user__title">Information about the owner:</h2>
-        <p class="user-text">Name: {{ apartment.user.user }}</p>
-        <p class="user-text">Tel: {{ apartment.user.phone }}</p>
-        <p class="user-text">E-mail: {{ apartment.user.email }}</p>
+        <div>
+          <RouterLink
+            class="user-link"
+            :to="{ name: 'userId-info', params: { id: apartment.owner } }"
+          >
+            <h2 class="info-user__title">Information about the owner:</h2>
+            <p class="user-text">Name: {{ apartment.user.user }}</p>
+            <p class="user-text">Tel: {{ apartment.user.phone }}</p>
+            <p class="user-text">E-mail: {{ apartment.user.email }}</p></RouterLink
+          >
+        </div>
+
+        <div v-if="apartment.user.userRating" style="float: right; margin-top: 12px">
+          <URating :rating="roundedRating(apartment.user.userRating)" />
+        </div>
       </div>
       <ul class="country-list">
         <li class="country-list__item">
@@ -199,12 +222,17 @@ const roundedRating = Math.round(props.apartment.rating)
       <h2 :style="{ marginBottom: '20px', marginTop: '20px' }">Reviews</h2>
       <div class="reviews">
         <p>{{ comments.length }} Reviews</p>
-        <h2 class="reviews__title">BAD RATING</h2>
+        <h2 class="reviews__title">RATING</h2>
 
         <div v-if="id !== apartment.owner && email !== apartment.user.email && isAuth">
           <h3>Leave a rating</h3>
           <h5 v-if="isVote">Thank you for voting</h5>
-          <AddRating :id="apartment._id" @update:isVote="isVote = $event" v-else />
+          <AddRating
+            :id="apartment._id"
+            @update:isVote="isVote = $event"
+            :ratingVote="apartmentRating"
+            v-else
+          />
         </div>
       </div>
       <div class="comments-wrapper" v-if="!comments.length !== 0">
@@ -267,6 +295,13 @@ const roundedRating = Math.round(props.apartment.rating)
 </template>
 
 <style scoped lang="scss">
+.user-link {
+  color: $main-color;
+  &:hover {
+    color: $activeColor;
+    transition: $transition;
+  }
+}
 .review-wrapper {
   display: flex;
   flex-direction: column;
@@ -353,6 +388,15 @@ const roundedRating = Math.round(props.apartment.rating)
     justify-content: flex-start;
   }
 }
+
+.info-user {
+  padding-top: 19px;
+  padding-right: 39px;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  background: #e1efff;
+  width: 350px;
+}
 .info-user__title {
   font-weight: 700;
   font-size: 20px;
@@ -376,14 +420,6 @@ const roundedRating = Math.round(props.apartment.rating)
   }
 }
 
-.info-user {
-  padding-top: 19px;
-  padding-right: 39px;
-  padding-left: 20px;
-  padding-bottom: 30px;
-  background: #e1efff;
-  width: 350px;
-}
 .main-img {
   height: 410px;
 }

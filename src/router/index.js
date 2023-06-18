@@ -78,6 +78,13 @@ const router = createRouter({
       component: () => import('../pages/Reserved.vue'),
       name: 'reserved-info',
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/user/:id',
+
+      component: () => import('../pages/UserPage.vue'),
+      name: 'userId-info',
+      meta: { requiresAuth: false }
     }
   ]
 })

@@ -60,7 +60,6 @@ const visibilityChanged = (isVisible) => {
   if (reserversStore.reserves.length !== reserversStore.totalReservePost) {
     page.value = +1
   }
-  console.log(isVisible)
 }
 
 const handlerIdGet = (id) => {

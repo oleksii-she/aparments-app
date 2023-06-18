@@ -166,7 +166,7 @@ const onSubmit = async (e) => {
     longStayPrice: Number(longStayPrice),
     description
   }
-  console.log(data)
+
   const formData = new FormData()
   formData.append('apartmentClass', data.apartmentClass)
   for (let i = 0; i < files.length; i++) {
