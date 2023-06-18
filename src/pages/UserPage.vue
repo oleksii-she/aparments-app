@@ -37,7 +37,7 @@ watchEffect(async () => {
   if (routeId) {
     await userStore.fetchUserApartments(routeId, page.value)
 
-    const { user, phone, email, userRating } = userStore.apartments[2].user
+    const { user, phone, email, userRating } = userStore.apartments[0].user
     const rating = Math.round(userRating)
     userInfo.value = { user, phone, email, rating }
     routeIdValue.value = routeId
