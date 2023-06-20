@@ -7,6 +7,7 @@ const props = defineProps({
   //     type: Number,
   //     default: 0
   //   },
+
   ratingVote: {
     type: Function,
     default: () => {}
@@ -16,7 +17,9 @@ const props = defineProps({
   starLimit: {
     type: Number,
     default: 5
-  }
+  },
+  width: Number,
+  height: Number
 })
 
 const rating = ref(0)
@@ -24,7 +27,7 @@ const currentRating = ref(0)
 
 const onClickRating = async (index) => {
   rating.value = index
-
+  console.log(props.id, index)
   props.ratingVote(props.id, index)
   // await apartmentRating(props.id, index)
   emits('update:isVote', true)
@@ -42,12 +45,18 @@ const onHoverRating = (index) => {
       :key="index"
       @click="onClickRating(index)"
       @mouseover="onHoverRating(index)"
+      :style="{ width, height }"
       :class="{ 'active-rating': index <= currentRating }"
     >
       <use xlink:href="@/assets/svg/sprite.svg#icon-star"></use>
     </svg>
     <div class="star-rating__colored">
-      <svg class="icon active-rating" v-for="index in rating" :key="index">
+      <svg
+        class="icon active-rating"
+        v-for="index in rating"
+        :key="index"
+        :style="{ width, height }"
+      >
         <use xlink:href="@/assets/svg/sprite.svg#icon-star"></use>
       </svg>
     </div>

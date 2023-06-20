@@ -5,11 +5,12 @@ import { ref, watchEffect, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore, useUserStore } from '@/stores'
 import { formatPhoneNumber, convertPhoneNumber } from '@/utils/formatPhoneNumber'
+import { userRating } from '../services/apiUser'
 import ApartmentList from '../components/apartment/apartmentList.vue'
 import ApartmentsItem from '@/components/apartment/apartmentItem.vue'
 import Pagination from '../components/global/pagination.vue'
 import { createToaster } from '@meforma/vue-toaster'
-
+import AddRating from '../components/AddRating.vue'
 const route = useRoute()
 const router = useRouter()
 const perPage = 9
@@ -30,24 +31,46 @@ const userValue = reactive({
 const userInfo = ref({})
 const routeIdValue = ref(null)
 
+const isVote = ref(false)
+
 watchEffect(async () => {
   const { id } = authStore
   router.push({ query: { ...route.query, page: page.value } })
   const routeId = route.params.id
   if (routeId) {
-    await userStore.fetchUserApartments(routeId, page.value)
-
-    const { user, phone, email, userRating } = userStore.apartments[0].user
-    const rating = Math.round(userRating)
-    userInfo.value = { user, phone, email, rating }
+    // const { user, phone, email, userRating } = userStore.apartments[0].user
     routeIdValue.value = routeId
+    const user = await userStore.fetchGetUser(routeId)
+    await userStore.fetchUserApartments(routeId, page.value)
+    const userVoted = user.usersRatings.find((el) => el.user === id)
+
+    if (userVoted) {
+      isVote.value = true
+    }
+
+    const rating = Math.round(user.userRating)
+    userInfo.value = { name: user.name, phone: user.phone, email: user.email, rating }
   } else {
     userStore.fetchUserApartments(id, page.value)
+    userValue.name = authStore.name
+    if (authStore.phone) {
+      const number = formatPhoneNumber(authStore.phone)
+      userValue.phone = number
+    }
   }
-  userValue.name = authStore.name
-  if (authStore.phone) {
-    const number = formatPhoneNumber(authStore.phone)
-    userValue.phone = number
+})
+
+watchEffect(async () => {
+  try {
+    // const { id } = authStore
+
+    await userStore.fetchGetUser(routeIdValue.value)
+
+    // if (userVoted) {
+    //   isVote.value = true
+    // }
+  } catch (error) {
+    console.log(error.message)
   }
 })
 
@@ -160,7 +183,7 @@ const updateValue = async () => {
             <div class="user" v-else>
               <div class="wrapper">
                 <div class="user__text-wrapper">
-                  <p class="user__text">Name: {{ userInfo.user }}</p>
+                  <p class="user__text">Name: {{ userInfo.name }}</p>
                 </div>
 
                 <div class="user__text-wrapper">
@@ -174,8 +197,15 @@ const updateValue = async () => {
             </div>
             <div class="user-rating-box">
               <h3>User rating</h3>
-
-              <URating :width="50" :height="50" :rating="userInfo.rating" />
+              <URating :width="50" :height="50" :rating="userInfo.rating" v-if="isVote" />
+              <AddRating
+                v-else
+                :width="50"
+                :height="50"
+                @update:isVote="isVote = $event"
+                :ratingVote="userRating"
+                :id="routeIdValue"
+              />
             </div>
           </div>
           <div>
@@ -229,10 +259,14 @@ const updateValue = async () => {
 }
 
 .user-wrapper {
+  border-bottom: 3px solid rgb(216, 223, 224);
+  margin-bottom: 12px;
   @media screen and (min-width: 768px) {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    border-bottom: 3px solid rgb(216, 223, 224);
+    margin-bottom: 22px;
   }
 }
 

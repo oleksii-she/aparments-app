@@ -1,4 +1,4 @@
-import { userApartments} from '../../services/apiUser'
+import { userApartments, getUser } from '../../services/apiUser'
 import { defineStore } from 'pinia'
 import { createToaster } from '@meforma/vue-toaster'
 
@@ -27,6 +27,18 @@ export const useUserStore = defineStore({
         this.loading = false
       }
     },
-  
+    async fetchGetUser(id) {
+      try {
+        this.loading = true
+        const response = await getUser(id)
+        this.loading = false
+        return response.data
+      } catch (error) {
+        this.error = error.message
+        toaster.error(error.message)
+      } finally {
+        this.loading = false
+      }
+    }
   }
 })
