@@ -1,0 +1,1 @@
+import{_ as o,o as s,c as _,p as c,k as a,a as e,l as n}from"./index-6112acc6.js";const p={},d=t=>(c("data-v-a777ae29"),t=t(),a(),t),r=n+"#icon-back",i={type:"button",class:"button"},u=d(()=>e("svg",{class:"button__icon"},[e("use",{"xlink:href":r})],-1)),l=[u];function h(t,B){return s(),_("button",i,l)}const f=o(p,[["render",h],["__scopeId","data-v-a777ae29"]]);export{f as B};
