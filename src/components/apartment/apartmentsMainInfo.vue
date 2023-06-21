@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watchEffect } from 'vue'
+import { ref, reactive, watchEffect, computed } from 'vue'
 import { createToaster } from '@meforma/vue-toaster'
 import { useAuthStore } from '@/stores'
 import { useApiApartmentsStore } from '@/stores/useStores/useApartmentStore'
@@ -10,9 +10,12 @@ import { useRouter } from 'vue-router'
 import URating from '../global/URating.vue'
 import AddRating from '../AddRating.vue'
 import Reserve from '../addReserve.vue'
-import { apartmentRating } from '../../services/apiApartments'
+// import { apartmentRating } from '../../services/apiApartments'
+
+const emits = defineEmits(['update:updateRating'])
 const props = defineProps({
   apartment: { type: Object, required: true },
+  id: String,
   someLocalProperty: {
     type: Number,
     default: 2
@@ -20,14 +23,19 @@ const props = defineProps({
   updateReserve: {
     type: Function,
     default: () => {}
+  },
+  handleRatingUpdate: {
+    type: Function,
+    default: () => {}
   }
 })
+
 const toaster = createToaster({ position: 'top' })
 const { addCommentPost, comments, fetchCommentDelleteId, fetchApartmentsDelleteId } =
   useApiApartmentsStore()
-
+const apartmentApi = useApiApartmentsStore()
 const { id, isAuth, email } = useAuthStore()
-
+const router = useRouter()
 const addComment = reactive({ comment: '' })
 
 const toggle = ref(false)
@@ -38,13 +46,18 @@ const loading = ref(false)
 const isVote = ref(false)
 const isLike = ref(false)
 const toggleReserve = ref(false)
-console.log(isLike)
-watchEffect(() => {
+
+watchEffect(async () => {
   if (id !== props.apartment.owner) {
     const userVoted = props.apartment.ratings.find((el) => el.user === id)
 
     if (userVoted) {
       isVote.value = true
+
+      console.log(props.apartment.rating)
+    }
+    if (isVote.value) {
+      emits('update:updateRating', true)
     }
   }
 
@@ -55,10 +68,18 @@ watchEffect(() => {
     // }
   }
 })
-const router = useRouter()
+
+// watchEffect(updateRatingValue, () => {
+//   if (updateRatingValue.value) {
+//     emits('update:updateRating', true)
+//   }
+// })
 
 const handlerAddComment = async () => {
   try {
+    if (!isVote.value) {
+      return console.log('додайте відгук')
+    }
     if (addComment.comment.trim() === '') {
       return console.log('додайте коментар')
     }
@@ -133,6 +154,15 @@ const goBack = () => {
 
 const roundedRating = (rating) => {
   return Math.round(rating)
+}
+const getRatingForComment = (id) => {
+  const rating = props.apartment.ratings.find((el) => el.user === id)
+
+  if (rating) {
+    return rating.rating
+  } else {
+    return 0
+  }
 }
 // const roundedRating = Math.round(props.apartment.rating)
 </script>
@@ -227,22 +257,14 @@ const roundedRating = (rating) => {
       </ul>
       <h2 :style="{ marginBottom: '20px', marginTop: '20px' }">Reviews</h2>
       <div class="reviews">
-        <p>{{ comments.length }} Reviews</p>
-        <h2 class="reviews__title">RATING</h2>
-
-        <div v-if="id !== apartment.owner && email !== apartment.user.email && isAuth">
-          <h3>Leave a rating</h3>
-          <h5 v-if="isVote">Thank you for voting</h5>
-          <AddRating
-            :id="apartment._id"
-            @update:isVote="isVote = $event"
-            :ratingVote="apartmentRating"
-            v-else
-          />
+        <h2 class="reviews__title">Overall rating</h2>
+        <div style="display: flex; justify-content: space-between">
+          <p>{{ comments.length }} Reviews</p>
+          <URating :rating="roundedRating(apartment.user.userRating)" />
         </div>
       </div>
       <div class="comments-wrapper" v-if="!comments.length !== 0">
-        <div v-for="item in comments" :key="item._id" class="comments">
+        <div v-for="item in apartmentApi.comments" :key="item._id" class="comments">
           <div class="comments-box" v-if="item.comment.length > 1">
             <div class="avatar-box">
               <div class="avatar-circle">
@@ -251,6 +273,9 @@ const roundedRating = (rating) => {
                 </svg>
               </div>
               <p>{{ item.user.name }}</p>
+              <!-- <p>Rating: {{ getRatingForComment(item.user.id) }}</p> -->
+
+              <URating :rating="getRatingForComment(item.user.id)" />
             </div>
             <div class="comment">
               <p class="comment__text" v-if="!toggle">{{ item.comment.slice(0, 70) + '...' }}</p>
@@ -273,6 +298,16 @@ const roundedRating = (rating) => {
 
       <Modal v-if="toggleModal" :toggleModal="toggleModal" :hideDialog="hideDialog">
         <form @submit.prevent.stop="handlerAddComment" class="form-response">
+          <div v-if="id !== apartment.owner && email !== apartment.user.email && isAuth">
+            <h3>Leave a rating</h3>
+            <h5 v-if="isVote">Thank you for voting</h5>
+            <AddRating
+              :id="apartment._id"
+              @update:isVote="isVote = $event"
+              :ratingVote="handleRatingUpdate"
+              v-else
+            />
+          </div>
           <h2>Write a review</h2>
           <textarea class="form-response__text" v-model="addComment.comment"></textarea>
           <UButton type="submit">Send</UButton>

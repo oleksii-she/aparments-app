@@ -1,5 +1,9 @@
 export const formatPhoneNumber = (phoneNumber) => {
   // Видаляємо всі знаки крім цифр
+
+  if (!phoneNumber) {
+    return ''
+  }
   const cleaned = phoneNumber.replace(/\D/g, '')
 
   // Визначаємо код країни, місцевий код і сам номер
@@ -16,6 +20,9 @@ export const formatPhoneNumber = (phoneNumber) => {
 }
 
 export const convertPhoneNumber = (phoneNumber) => {
+  if (!phoneNumber) {
+    return ''
+  }
   const digitsOnly = phoneNumber.replace(/\D/g, '')
 
   // Додаємо префікс "+380"

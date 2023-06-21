@@ -37,10 +37,11 @@ watchEffect(async () => {
   const { id } = authStore
   router.push({ query: { ...route.query, page: page.value } })
   const routeId = route.params.id
-  if (routeId) {
+  if (routeId && id !== routeId) {
     // const { user, phone, email, userRating } = userStore.apartments[0].user
     routeIdValue.value = routeId
     const user = await userStore.fetchGetUser(routeId)
+
     await userStore.fetchUserApartments(routeId, page.value)
     const userVoted = user.usersRatings.find((el) => el.user === id)
 
@@ -63,8 +64,10 @@ watchEffect(async () => {
 watchEffect(async () => {
   try {
     // const { id } = authStore
-
-    await userStore.fetchGetUser(routeIdValue.value)
+    if (isVote.value) {
+      await userStore.fetchGetUser(routeIdValue.value)
+      console.log('fetchGetUser')
+    }
 
     // if (userVoted) {
     //   isVote.value = true
@@ -118,7 +121,7 @@ const updateValue = async () => {
       <div class="container user-page">
         <div class="home-page__wrapper">
           <div class="user-wrapper">
-            <div class="user" v-if="!routeIdValue">
+            <div class="user" v-if="!routeIdValue || authStore.id === routeIdValue">
               <div class="wrapper">
                 <div v-if="!targetValue.name" class="user__text-wrapper">
                   <p class="user__text">і’мя: {{ userValue.name }}</p>
@@ -195,7 +198,12 @@ const updateValue = async () => {
                 </div>
               </div>
             </div>
-            <div class="user-rating-box">
+            <!--  v-if="!routeIdValue || authStore.id === routeIdValue" -->
+            <div class="user-rating-box" v-if="!routeIdValue || authStore.id === routeIdValue">
+              <h3>User rating</h3>
+              <URating :width="50" :height="50" :rating="userInfo.rating" />
+            </div>
+            <div class="user-rating-box" v-else>
               <h3>User rating</h3>
               <URating :width="50" :height="50" :rating="userInfo.rating" v-if="isVote" />
               <AddRating
