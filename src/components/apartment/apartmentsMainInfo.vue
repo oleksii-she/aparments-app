@@ -1,6 +1,5 @@
 <script setup>
-import { ref, reactive, watchEffect, computed } from 'vue'
-import { createToaster } from '@meforma/vue-toaster'
+import { ref, watchEffect } from 'vue'
 import { useAuthStore } from '@/stores'
 import { useApiApartmentsStore } from '@/stores/useStores/useApartmentStore'
 import { Carousel, Slide, Navigation } from 'vue3-carousel'
@@ -8,9 +7,8 @@ import Modal from '../global/modal.vue'
 import BackBtn from '../global/BackBtn.vue'
 import { useRouter } from 'vue-router'
 import URating from '../global/URating.vue'
-import AddRating from '../AddRating.vue'
+
 import Reserve from '../addReserve.vue'
-// import { apartmentRating } from '../../services/apiApartments'
 
 const emits = defineEmits(['update:updateRating'])
 const props = defineProps({
@@ -30,21 +28,16 @@ const props = defineProps({
   }
 })
 
-const toaster = createToaster({ position: 'top' })
-const { addCommentPost, comments, fetchCommentDelleteId, fetchApartmentsDelleteId } =
-  useApiApartmentsStore()
-const apartmentApi = useApiApartmentsStore()
-const { id, isAuth, email } = useAuthStore()
-const router = useRouter()
-const addComment = reactive({ comment: '' })
+const { fetchApartmentsDelleteId } = useApiApartmentsStore()
 
-const toggle = ref(false)
-const toggleModal = ref(false)
+const { id, isAuth } = useAuthStore()
+const router = useRouter()
+
 const toggleModalRemove = ref(false)
-const removeToggleComment = ref(false)
+
 const loading = ref(false)
 const isVote = ref(false)
-const isLike = ref(false)
+
 const toggleReserve = ref(false)
 const currentSlide = ref(0)
 const toggleImg = ref(false)
@@ -62,66 +55,8 @@ watchEffect(async () => {
       emits('update:updateRating', true)
     }
   }
-
-  if (id !== props.apartment.owner) {
-    // const userVoted = props.apartment.user.usersRatings.find((el) => el.user === id)
-    // if (userVoted) {
-    //   isLike.value = true
-    // }
-  }
 })
 
-// watchEffect(updateRatingValue, () => {
-//   if (updateRatingValue.value) {
-//     emits('update:updateRating', true)
-//   }
-// })
-
-const handlerAddComment = async () => {
-  try {
-    if (!isVote.value) {
-      return console.log('додайте відгук')
-    }
-    if (addComment.comment.trim() === '') {
-      return console.log('додайте коментар')
-    }
-    if (addComment.comment.length < 5) {
-      return toaster.error('The comment should be longer')
-    }
-    const formData = new FormData()
-    formData.append('comment', addComment.comment)
-    await addCommentPost(props.apartment._id, addComment)
-    addComment.comment = ''
-    hideDialog()
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-const deleteComment = async (id) => {
-  try {
-    const index = comments.findIndex((item) => item._id === id)
-
-    if (index !== -1) {
-      comments.splice(index, 1)
-    }
-
-    await fetchCommentDelleteId(id)
-  } catch (error) {
-    console.log(error.message)
-  }
-}
-
-const toggleReadMore = () => {
-  toggle.value = !toggle.value
-}
-
-const onModal = () => {
-  toggleModal.value = !toggleModal.value
-}
-const hideDialog = () => {
-  toggleModal.value = !toggleModal.value
-}
 const hideReserve = () => {
   toggleReserve.value = !toggleReserve.value
 }
@@ -160,16 +95,6 @@ const goBack = () => {
 const roundedRating = (rating) => {
   return Math.round(rating)
 }
-const getRatingForComment = (id) => {
-  const rating = props.apartment.ratings.find((el) => el.user === id)
-
-  if (rating) {
-    return rating.rating
-  } else {
-    return 0
-  }
-}
-// const roundedRating = Math.round(props.apartment.rating)
 
 const slideTo = (index) => {
   currentSlide.value = index
@@ -285,62 +210,8 @@ const onClickToggleImg = (img) => {
           </p>
         </li>
       </ul>
-      <h2 :style="{ marginBottom: '20px', marginTop: '20px' }">Reviews</h2>
-      <div class="reviews">
-        <h2 class="reviews__title">Overall rating</h2>
-        <div style="display: flex; justify-content: space-between">
-          <p>{{ comments.length }} Reviews</p>
-          <URating :rating="roundedRating(apartment.rating)" />
-        </div>
-      </div>
-      <div class="comments-wrapper" v-if="!comments.length !== 0">
-        <div v-for="item in apartmentApi.comments" :key="item._id" class="comments">
-          <div class="comments-box" v-if="item.comment.length > 1">
-            <div class="avatar-box">
-              <div class="avatar-circle">
-                <svg class="avatar-circle__svg">
-                  <use xlink:href="@/assets/svg/sprite.svg#icon-user"></use>
-                </svg>
-              </div>
-              <p>{{ item.user.name }}</p>
-              <URating :rating="getRatingForComment(item.user.id)" />
-            </div>
-            <div class="comment">
-              <p class="comment__text" v-if="!toggle">{{ item.comment.slice(0, 70) + '...' }}</p>
-              <p class="comment__text" v-else>{{ item.comment }}</p>
-              <button v-if="item.comment.length > 70" @click="toggleReadMore">
-                {{ !toggle ? 'Read more' : 'shorten' }}
-              </button>
-              <button
-                @click="deleteComment(item._id)"
-                v-if="!removeToggleComment && id === apartment.owner"
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <UButton v-if="isAuth" @click="onModal" class="button__add-response">Leave a comment</UButton>
-
-      <Modal v-if="toggleModal" :toggleModal="toggleModal" :hideDialog="hideDialog">
-        <form @submit.prevent.stop="handlerAddComment" class="form-response">
-          <div v-if="id !== apartment.owner && email !== apartment.user.email && isAuth">
-            <h3>Leave a rating</h3>
-            <h5 v-if="isVote">Thank you for voting</h5>
-            <AddRating
-              :id="apartment._id"
-              @update:isVote="isVote = $event"
-              :ratingVote="handleRatingUpdate"
-              v-else
-            />
-          </div>
-          <h2>Write a review</h2>
-          <textarea class="form-response__text" v-model="addComment.comment"></textarea>
-          <UButton type="submit">Send</UButton>
-        </form>
-      </Modal>
+      <slot />
 
       <Modal v-if="toggleModalRemove" :toggleModal="toggleModalRemove" :hideDialog="hideModalRemove"
         ><div class="remove">
@@ -435,11 +306,6 @@ const onClickToggleImg = (img) => {
   }
 }
 
-.comments-wrapper {
-  max-height: 389px;
-  overflow: auto;
-  margin-bottom: 21px;
-}
 .heading {
   @media screen and (min-width: 768px) {
     display: flex;
@@ -501,17 +367,8 @@ const onClickToggleImg = (img) => {
     bottom: -7%;
   }
 }
-.slide {
-  @media screen and (min-width: 768px) {
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* height: 500px; */
-  }
-}
-/* width: 435px; */
+
 .carousel {
-  /* width: 320px; */
   @media screen and (min-width: 768px) {
     width: 435px;
   }
@@ -595,106 +452,6 @@ const onClickToggleImg = (img) => {
 
 .img-thumb {
   max-width: 75%;
-}
-.comments {
-  background-color: $background;
-  margin-bottom: 8px;
-  @media screen and (max-width: 768px) {
-    width: 350px;
-  }
-}
-.avatar-box {
-  display: flex;
-  align-items: center;
-  padding: 17px;
-  gap: 15px;
-}
-.avatar-circle {
-  background-color: $secondary-color;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &__svg {
-    width: 26px;
-    fill: white;
-  }
-}
-
-.comment {
-  padding-left: 20px;
-  padding-right: 20px;
-
-  &__text {
-    width: 270px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    overflow: hidden;
-    margin-bottom: 20px;
-
-    font-weight: 500;
-    font-size: 16px;
-    line-height: calc(20 / 16);
-  }
-}
-.reviews {
-  background-color: $reviews;
-  padding: 12px;
-  width: 350px;
-  &__title {
-    font-weight: 700;
-    font-size: 20px;
-    line-height: calc(24 / 20);
-    margin-bottom: 7px;
-  }
-}
-
-.comments-box {
-  mix-blend-mode: normal;
-  border: 2px solid #e1efff;
-}
-
-.avatar-box {
-  margin-bottom: 19px;
-}
-
-.form-response {
-  background: $background;
-  padding: 20px;
-  border-radius: 20px;
-  @media screen and (min-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  &__text {
-    margin-top: 25px;
-    margin-bottom: 16px;
-    @media screen and (min-width: 1280px) {
-      width: 700px;
-      height: 500px;
-    }
-    width: 284px;
-    height: 170px;
-    border: 2px solid $secondary-color;
-
-    outline: rgb(237, 88, 1);
-    padding: 8px 11px;
-    cursor: pointer;
-    resize: none;
-    &:hover,
-    &:focus {
-      border-color: rgb(237, 88, 1);
-    }
-
-    font-size: 18px;
-    line-height: calc(22 / 18);
-  }
 }
 
 .info-wrapper {

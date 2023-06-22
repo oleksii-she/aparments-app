@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { useApiApartmentsStore } from '@/stores/useStores/useApartmentStore'
 import ApartmentsMainInfo from '@/components/apartment/apartmentsMainInfo.vue'
 import { apartmentRating } from '../services/apiApartments'
+import Reviews from '../components/Review/reviews.vue'
 const route = useRoute()
 const apartmentsStore = useApiApartmentsStore()
 
@@ -13,8 +14,7 @@ const { id } = route.params
 const toaster = createToaster({ position: 'top' })
 
 const data = ref(null)
-const comments = ref(null)
-// const updateRating = ref(false)
+// const comments = ref(null)
 const updateRating = ref(false)
 
 const updateReserve = async (id) => {
@@ -35,14 +35,10 @@ const fetchApartmentData = async () => {
   }
 }
 
-// Виконується після встановлення рейтингу
 const handleRatingUpdate = async (id, newRating) => {
-  // Виконуємо оновлення рейтингу на сервері
   try {
-    console.log(newRating, 'newRating')
-    // await apartmentsStore.updateApartmentRating(id, newRating)
     await apartmentRating(id, newRating)
-    // Після успішного оновлення рейтингу оновлюємо дані апартаментів
+
     fetchApartmentData()
   } catch (error) {
     console.log(error.message)
@@ -50,7 +46,6 @@ const handleRatingUpdate = async (id, newRating) => {
 }
 
 watchEffect(() => {
-  // Перевіряємо, чи потрібно оновити дані апартаментів
   if (updateRating.value) {
     fetchApartmentData()
   } else {
@@ -58,14 +53,9 @@ watchEffect(() => {
   }
 })
 
-// watchEffect(async () => {
-//   if (updateRating.value) {
-//     console.log(updateRating.value, 'updateRating.value')
-//     const result = await apartmentsStore.fetchApartmentsId(id)
-
-//     data.value = result.result
-//   }
-// })
+// const roundedRating = (rating) => {
+//   return Math.round(rating)
+// }
 </script>
 <template lang="">
   <main>
@@ -77,8 +67,9 @@ watchEffect(() => {
           :updateReserve="updateReserve"
           :id="id"
           @update:updateRating="updateRating = $event"
-          :handleRatingUpdate="handleRatingUpdate"
-        />
+        >
+          <Reviews :apartment="data" :handleRatingUpdate="handleRatingUpdate"
+        /></ApartmentsMainInfo>
       </div>
     </section>
   </main>
