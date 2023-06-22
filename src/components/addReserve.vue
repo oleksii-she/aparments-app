@@ -122,6 +122,7 @@ const onSubmit = async () => {
 
 <style scoped lang="scss">
 .reserve {
+  background-color: $background;
   padding: 20px;
   margin: 0 auto;
   &__title {

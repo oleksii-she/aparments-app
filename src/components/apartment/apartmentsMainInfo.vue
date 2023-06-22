@@ -46,7 +46,9 @@ const loading = ref(false)
 const isVote = ref(false)
 const isLike = ref(false)
 const toggleReserve = ref(false)
-
+const currentSlide = ref(0)
+const toggleImg = ref(false)
+const imgLink = ref(null)
 watchEffect(async () => {
   if (id !== props.apartment.owner) {
     const userVoted = props.apartment.ratings.find((el) => el.user === id)
@@ -126,6 +128,9 @@ const hideReserve = () => {
 const hideModalRemove = () => {
   toggleModalRemove.value = !toggleModalRemove.value
 }
+const hideToggleImg = () => {
+  toggleImg.value = !toggleImg.value
+}
 
 const apartmentDellete = async (id) => {
   try {
@@ -165,6 +170,15 @@ const getRatingForComment = (id) => {
   }
 }
 // const roundedRating = Math.round(props.apartment.rating)
+
+const slideTo = (index) => {
+  currentSlide.value = index
+}
+const onClickToggleImg = (img) => {
+  console.log('click')
+  imgLink.value = img
+  toggleImg.value = true
+}
 </script>
 <template>
   <div class="review-wrapper">
@@ -174,15 +188,31 @@ const getRatingForComment = (id) => {
         <h2 class="heading__title">{{ apartment.name }}</h2>
         <URating :rating="roundedRating(apartment.rating)" />
       </div>
-      <carousel :items-to-show="1" class="carousel">
-        <slide v-for="image in images" :key="image">
-          <img :src="image" :alt="apartment.name" class="img" />
-        </slide>
+      <div class="img-gallery">
+        <carousel :items-to-show="1" class="carousel" v-model="currentSlide">
+          <slide v-for="image in images" :key="image">
+            <div class="carousel__item" @click="onClickToggleImg(image)">
+              <img :src="image" :alt="apartment.name" class="img" />
+            </div>
+          </slide>
 
-        <template #addons>
-          <navigation />
-        </template>
-      </carousel>
+          <template #addons>
+            <navigation />
+          </template>
+        </carousel>
+        <div class="img-gallery__thumb">
+          <Carousel id="thumbnails" :items-to-show="3" :wrap-around="true" v-model="currentSlide">
+            <Slide v-for="(slide, index) in images" :key="index">
+              <div class="carousel__item" @click="slideTo(index)">
+                <img :src="slide" :alt="apartment.name" class="img-thumb" />
+              </div>
+            </Slide>
+          </Carousel>
+        </div>
+        <Modal v-if="toggleImg" :toggleModal="toggleImg" :hideDialog="hideToggleImg" :padding="0">
+          <img :src="imgLink" :alt="apartment.name" class="img" />
+        </Modal>
+      </div>
       <div class="price">
         <ul class="price__list">
           <li class="price__item">
@@ -260,7 +290,7 @@ const getRatingForComment = (id) => {
         <h2 class="reviews__title">Overall rating</h2>
         <div style="display: flex; justify-content: space-between">
           <p>{{ comments.length }} Reviews</p>
-          <URating :rating="roundedRating(apartment.user.userRating)" />
+          <URating :rating="roundedRating(apartment.rating)" />
         </div>
       </div>
       <div class="comments-wrapper" v-if="!comments.length !== 0">
@@ -273,8 +303,6 @@ const getRatingForComment = (id) => {
                 </svg>
               </div>
               <p>{{ item.user.name }}</p>
-              <!-- <p>Rating: {{ getRatingForComment(item.user.id) }}</p> -->
-
               <URating :rating="getRatingForComment(item.user.id)" />
             </div>
             <div class="comment">
@@ -465,15 +493,48 @@ const getRatingForComment = (id) => {
   height: 410px;
 }
 
-.slide {
-  @media screen and (min-width: 768px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 500px;
+.img-gallery {
+  position: relative;
+
+  &__thumb {
+    position: absolute;
+    bottom: -7%;
   }
 }
+.slide {
+  @media screen and (min-width: 768px) {
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* height: 500px; */
+  }
+}
+/* width: 435px; */
+.carousel {
+  /* width: 320px; */
+  @media screen and (min-width: 768px) {
+    width: 435px;
+  }
+}
+.carousel__item {
+  min-height: 200px;
+  width: 100%;
+  font-size: 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.carousel__slide {
+  padding: 10px;
+}
+
+.carousel__prev,
+.carousel__next {
+  box-sizing: content-box;
+  border: 5px solid white;
+}
 .price {
   &__list {
     display: flex;
@@ -527,11 +588,16 @@ const getRatingForComment = (id) => {
 }
 .img {
   max-width: 100%;
-
-  max-height: 410px;
+  border-radius: 20px;
+  max-height: 480px;
   object-fit: cover;
 }
+
+.img-thumb {
+  max-width: 75%;
+}
 .comments {
+  background-color: $background;
   margin-bottom: 8px;
   @media screen and (max-width: 768px) {
     width: 350px;
@@ -596,6 +662,9 @@ const getRatingForComment = (id) => {
 }
 
 .form-response {
+  background: $background;
+  padding: 20px;
+  border-radius: 20px;
   @media screen and (min-width: 768px) {
     display: flex;
     flex-direction: column;
