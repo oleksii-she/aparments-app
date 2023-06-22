@@ -86,9 +86,7 @@ const handlerAddComment = async () => {
     if (addComment.comment.length < 5) {
       return toaster.error('The comment should be longer')
     }
-    // const formData = new FormData()
-    // console.log(addComment)
-    // formData.append('comment', addComment.comment)
+
     await apartmentsStore.addCommentPost(props.apartment._id, { comment: addComment.comment })
     addComment.comment = ''
     hideDialog()
