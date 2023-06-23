@@ -17,7 +17,7 @@ const perPage = 9
 const authStore = useAuthStore()
 
 const selectedCountry = ref(null)
-const selectedPrice = ref(null)
+const selectedPrice = ref(0)
 const page = ref(parseInt(route.query.page) || 1)
 const countries = ref(['All countries'])
 const phoneWarningToggle = ref(false)
@@ -110,7 +110,10 @@ watch(selectedPrice, async () => {
           </ApartmentList>
         </div>
         <Pagination
-          v-if="apiStore.totalPosts > 9 && !apiStore.loading"
+          v-if="
+            selectedPrice === 0 ||
+            (selectedPrice === '' && apiStore.totalPosts > 9 && !apiStore.loading)
+          "
           class="paginate"
           v-model="page"
           :perPage="perPage"

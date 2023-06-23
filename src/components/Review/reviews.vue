@@ -23,21 +23,29 @@ const toggle = ref(false)
 const toggleModal = ref(false)
 const removeToggleComment = ref(false)
 const isVote = ref(false)
+const page = ref(1)
 
 const toaster = createToaster({ position: 'top' })
 
 watchEffect(async () => {
-  if (id !== props.apartment.owner) {
-    const userVoted = props.apartment.ratings.find((el) => el.user === id)
+  try {
+    if (id !== props.apartment.owner) {
+      const userVoted = props.apartment.ratings.find((el) => el.user === id)
 
-    if (userVoted) {
-      isVote.value = true
-
-      console.log(props.apartment.rating)
+      if (userVoted) {
+        isVote.value = true
+      }
+      if (isVote.value) {
+        emits('update:updateRating', true)
+      }
     }
-    if (isVote.value) {
-      emits('update:updateRating', true)
+    if (page.value === 1) {
+      await apartmentsStore.fetchGetComments(props.apartment._id, page)
+    } else {
+      await apartmentsStore.fetchAddComments(props.apartment._id, page)
     }
+  } catch (error) {
+    console.log(error.message)
   }
 })
 
@@ -94,6 +102,10 @@ const handlerAddComment = async () => {
     console.log(error.message)
   }
 }
+
+const onPageClick = () => {
+  page.value = page.value + 1
+}
 </script>
 <template lang="">
   <div>
@@ -133,6 +145,9 @@ const handlerAddComment = async () => {
           </div>
         </div>
       </div>
+      <div class="load-more">
+        <p @click="onPageClick" class="load-more__text">Read more...</p>
+      </div>
     </div>
     <UButton v-if="isAuth" @click="toggleModal = true" class="button__add-response"
       >Leave a comment</UButton
@@ -160,7 +175,8 @@ const handlerAddComment = async () => {
 <style scoped lang="scss">
 .reviews {
   background-color: $reviews;
-  padding: 12px;
+  padding-top: 12px;
+  padding-bottom: 14px;
   width: 350px;
   &__title {
     font-weight: 700;
@@ -185,6 +201,22 @@ const handlerAddComment = async () => {
   }
 }
 
+.load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+  &__text {
+    font-size: 16px;
+    line-height: calc(16 / 18);
+    cursor: pointer;
+    &:hover {
+      color: $activeColor;
+      transition: $transition;
+    }
+  }
+}
+
 .comments-box {
   mix-blend-mode: normal;
   border: 2px solid #e1efff;
@@ -192,7 +224,6 @@ const handlerAddComment = async () => {
 .comments-wrapper {
   max-height: 389px;
   overflow: auto;
-  margin-bottom: 21px;
 }
 .comment {
   padding-left: 20px;

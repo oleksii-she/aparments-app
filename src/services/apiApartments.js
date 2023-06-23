@@ -33,6 +33,12 @@ export const addComment = async (id, formData) => {
 
   return response.data
 }
+//
+
+export const getComments = async (id, page) => {
+  const response = await axiosInstance.get(`apartments/${id}/comments?limit=2&page=${page}`)
+  return response.data
+}
 
 export const commentDelleteId = async (id) => {
   const response = await axiosInstance.delete(`apartments/${id}/comments`)

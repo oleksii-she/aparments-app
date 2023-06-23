@@ -5,7 +5,8 @@ import {
   apartmentDelleteId,
   addComment,
   commentDelleteId,
-  updateReserve
+  updateReserve,
+  getComments
 } from '../../services/apiApartments'
 import { defineStore } from 'pinia'
 import { createToaster } from '@meforma/vue-toaster'
@@ -52,7 +53,7 @@ export const useApiApartmentsStore = defineStore({
         }
         this.loading = true
         const response = await apartmentsId(id)
-        this.comments = response.data.comments
+
         return response.data
       } catch (error) {
         this.error = error.message
@@ -97,6 +98,42 @@ export const useApiApartmentsStore = defineStore({
         toaster.error(error.message)
       }
     },
+    async fetchGetComments(id) {
+      try {
+        this.loading = true
+
+        const response = await getComments(id)
+
+        this.comments = response.data
+      } catch (error) {
+        this.error = error.message
+        toaster.error(error.message)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchAddComments(id, page) {
+      try {
+        console.log(page, 'page')
+        this.loading = true
+
+        const response = await getComments(id, page.value)
+        this.comments.push(...response.data)
+
+        if (response.data.length === 0) {
+          return
+        } else {
+          console.log('555')
+        }
+      } catch (error) {
+        this.error = error.message
+        toaster.error(error.message)
+      } finally {
+        this.loading = false
+      }
+    },
+
     async fetchCommentDelleteId(id) {
       try {
         this.loading = true
