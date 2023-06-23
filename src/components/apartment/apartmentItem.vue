@@ -54,7 +54,7 @@ const roundedRating = Math.round(props.rating)
   height: calc(100hv - 24px);
 
   @media screen and (min-width: 768px) {
-    width: calc(100vw / 2 - 110px);
+    width: calc(100vw / 2 - 119px);
     min-height: 220px;
   }
   @media screen and (min-width: 1280px) {

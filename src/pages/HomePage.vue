@@ -109,19 +109,18 @@ watch(selectedPrice, async () => {
             </template>
           </ApartmentList>
         </div>
-        <Pagination
-          v-if="
-            selectedPrice === 0 ||
-            (selectedPrice === '' && apiStore.totalPosts > 9 && !apiStore.loading)
-          "
-          class="paginate"
-          v-model="page"
-          :perPage="perPage"
-          :rangeSize="1"
-          active-color="#DCEDFF"
-          @update:value="page = $event"
-          :totalPost="apiStore.totalPosts"
-        />
+        <div v-if="selectedPrice === 0 || selectedPrice === ''">
+          <Pagination
+            v-show="!apiStore.loading && apiStore.totalPosts > 9"
+            class="paginate"
+            v-model="page"
+            :perPage="perPage"
+            :rangeSize="1"
+            active-color="#DCEDFF"
+            @update:value="page = $event"
+            :totalPost="apiStore.totalPosts"
+          />
+        </div>
       </div>
     </section>
   </main>
