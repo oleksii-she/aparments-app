@@ -1,13 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-// import { apartmentRating } from '../services/apiApartments'
+
 const emits = defineEmits(['update:isVote'])
 const props = defineProps({
-  //   rating: {
-  //     type: Number,
-  //     default: 0
-  //   },
-
   ratingVote: {
     type: Function,
     default: () => {}

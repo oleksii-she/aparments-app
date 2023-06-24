@@ -122,9 +122,9 @@ export const useApiApartmentsStore = defineStore({
         this.comments.push(...response.data)
 
         if (response.data.length === 0) {
-          return
+          return false
         } else {
-          console.log('555')
+          return response.data
         }
       } catch (error) {
         this.error = error.message
@@ -153,8 +153,6 @@ export const useApiApartmentsStore = defineStore({
         const response = await updateReserve(id, formData)
         this.loading = false
         return response.data
-        // this.apartments = this.apartments.filter((el) => el._id !== response.data.result._id)
-        // this.apartments.push(response.data.result)
       } catch (error) {
         console.log(error.message)
         toaster.error(error.message)

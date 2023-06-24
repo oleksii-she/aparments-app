@@ -1,14 +1,12 @@
 <script setup>
-// import { useApiApartmentsStore } from '@/stores'
 import { useRoute, useRouter } from 'vue-router'
-// import ReservedInfo from '../../pages/ReservedInfo.vue'
+
 import { ref, watchEffect } from 'vue'
 import dayjs from 'dayjs'
 
 const route = useRoute()
 const router = useRouter()
 
-// const { id: idParams } = route.params
 const idParams = ref(null)
 
 const props = defineProps({
@@ -63,9 +61,6 @@ const showReservedInfo = (id) => {
 </template>
 
 <style scoped lang="scss">
-.wrapper {
-}
-
 .reserve-list {
   display: flex;
   flex-direction: column;

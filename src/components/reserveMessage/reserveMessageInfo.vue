@@ -2,11 +2,6 @@
 import dayjs from 'dayjs'
 import { watchEffect, ref } from 'vue'
 
-// import { useApiApartmentsStore } from '@/stores'
-
-// const apartmentsStore = useApiApartmentsStore()
-// const apartmentIdImage = ref(null)
-
 const props = defineProps({
   reserveInfo: Object,
   updateReserve: {

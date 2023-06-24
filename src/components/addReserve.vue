@@ -6,7 +6,7 @@ import { convertPhoneNumber } from '../utils/formatPhoneNumber'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import { addDays } from 'date-fns'
 import dayjs from 'dayjs'
-
+import { charLimit, emailValidation } from '@/utils/validation'
 const props = defineProps({
   id: {
     type: String
@@ -31,9 +31,38 @@ const data = reactive({
   numberOfDays: 0
 })
 
-const thankToggle = ref(false)
+const errorMessageState = reactive({
+  name: '',
+  email: ''
+})
 
+const isValid = ref(false)
+const isValidate = ref(false)
+const thankToggle = ref(false)
 const date = ref([new Date(), addDays(new Date(), 1)])
+
+watchEffect(() => {
+  const validName = charLimit(data.name, 2, 25)
+
+  if (!validName.hasPassed) {
+    errorMessageState.name = validName.message
+    isValidate.value = false
+    return
+  } else {
+    errorMessageState.name = ''
+  }
+
+  const validEmail = emailValidation(data.email)
+
+  if (!validEmail.hasPassed) {
+    errorMessageState.email = validEmail.message
+    isValidate.value = false
+    return
+  } else {
+    errorMessageState.email = ''
+  }
+  isValidate.value = true
+})
 
 watchEffect(() => {
   let startDate = date.value[0]
@@ -54,6 +83,7 @@ watchEffect(() => {
   data.startDate = dayjs(startDate).format('YYYY.MM.DD')
   data.endDate = dayjs(endDate).format('YYYY.MM.DD')
 })
+
 const onSubmit = async () => {
   try {
     const phone = convertPhoneNumber(data.phone)
@@ -72,7 +102,12 @@ const onSubmit = async () => {
     if (newReserve.name === '' || newReserve.email === '' || newReserve.phone.length < 10) {
       return
     }
-    await reserversStore.fetchAddReserve(props.id, newReserve)
+    if (isValidate.value) {
+      const response = await reserversStore.fetchAddReserve(props.id, newReserve)
+      if (!response) {
+        return
+      }
+    }
 
     thankToggle.value = true
     setTimeout(() => {
@@ -87,14 +122,24 @@ const onSubmit = async () => {
   <div class="reserve">
     <h2 class="reserve__title">Reserve</h2>
     <form action="" class="reserve__form" v-if="!thankToggle" @submit.prevent.stop="onSubmit">
-      <UInput type="text" v-model="data.name">
+      <UInput
+        type="text"
+        v-model="data.name"
+        :errorMessage="errorMessageState.name"
+        @update:isValid="isValid = $event"
+      >
         <p style="margin-bottom: 2px">Your name</p>
       </UInput>
       <UInput type="tel" v-model="data.phone">
         <p style="margin-bottom: 2px">Your phone number</p>
       </UInput>
 
-      <UInput type="email" v-model="data.email">
+      <UInput
+        type="email"
+        v-model="data.email"
+        :errorMessage="errorMessageState.email"
+        @update:isValid="isValid = $event"
+      >
         <p style="margin-bottom: 2px">Your email</p>
       </UInput>
 

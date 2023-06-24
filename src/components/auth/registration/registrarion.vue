@@ -17,7 +17,6 @@ const registrationState = reactive({
   confirmPassword: ''
 })
 
-
 const isValid = ref(false)
 const loading = ref(false)
 const showPassword = ref(false)
@@ -37,7 +36,7 @@ const validators = [
 ]
 const isValides = ref(false)
 watch(registrationState, () => {
-  let valid = true // initialize to true
+  let valid = true
 
   for (let validator of validators) {
     const field = validator.name
@@ -46,7 +45,7 @@ watch(registrationState, () => {
     if (registrationState[field]) {
       if (!validation.hasPassed) {
         errorMessageState[field] = validation.message
-        valid = false // set to false only if a field fails validation
+        valid = false
       } else {
         errorMessageState[field] = ''
       }
@@ -64,15 +63,15 @@ watch(registrationState, () => {
     }
   }
 
-  isValides.value = valid // set isValides directly instead of returning it
+  isValides.value = valid
 })
 const onSubmit = async () => {
   const NumberRegex = /^(\+|\d{2})\d{12,15}$/
   const phone = convertPhoneNumber(registrationState.phone)
-  console.log(phone);
+
   if (!NumberRegex.test(phone)) {
-      return toaster.warning(`Wrongly entered number`)
-    }
+    return toaster.warning(`Wrongly entered number`)
+  }
   const formData = {
     name: registrationState.name,
     email: registrationState.email,
@@ -85,7 +84,7 @@ const onSubmit = async () => {
   // Перевірка співпадіння пароля та підтвердження пароля
 
   if (!formData.name || !formData.email || !formData.password || !formData.phone) {
-    return  toaster.warning('All fields must be filled')
+    return toaster.warning('All fields must be filled')
   }
 
   try {
@@ -99,12 +98,10 @@ const onSubmit = async () => {
     }
   } catch (error) {
     loading.value = false
-   
+
     return toaster.warning(authStore.statusError)
   }
 }
-
-
 </script>
 
 <template lang="">
@@ -112,7 +109,6 @@ const onSubmit = async () => {
     <h2 class="form__title">Реєстрація</h2>
     <ULoader :loading="loading" />
     <UInput
-    
       v-model="registrationState.name"
       placeholder="Name"
       type="text"
@@ -121,7 +117,6 @@ const onSubmit = async () => {
     >
     </UInput>
     <UInput
-     
       v-model="registrationState.email"
       placeholder="Email"
       type="email"
@@ -129,41 +124,40 @@ const onSubmit = async () => {
       @update:isValid="isValid = $event"
     ></UInput>
     <UInput
-     
       v-model="registrationState.phone"
       placeholder="Phone"
       type="tel"
       @update:isValid="isValid = $event"
     ></UInput>
-    <div  class='wrapper-password'>
+    <div class="wrapper-password">
       <UInput
-     
-     v-model="registrationState.password"
-     placeholder="Password"
-     type="password"
-     :errorMessage="errorMessageState.password"
-     :showPassword='showPassword'
-   >
-   </UInput>
-   <button type='button' class='button-eyes'  @click="showPassword = !showPassword"><svg class='eyes-icon'>
-          <use  xlink:href="@/assets/svg/sprite.svg#icon-eyes"></use>
-        </svg></button>
+        v-model="registrationState.password"
+        placeholder="Password"
+        type="password"
+        :errorMessage="errorMessageState.password"
+        :showPassword="showPassword"
+      >
+      </UInput>
+      <button type="button" class="button-eyes" @click="showPassword = !showPassword">
+        <svg class="eyes-icon">
+          <use xlink:href="@/assets/svg/sprite.svg#icon-eyes"></use>
+        </svg>
+      </button>
     </div>
 
-      <UInput
-    v-model="registrationState.confirmPassword"
-    placeholder="Confirm password"
-    type="password"
-    :errorMessage="errorMessageState.confirmPassword"
-    :showPassword='showPassword'
-  >
-  </UInput>
+    <UInput
+      v-model="registrationState.confirmPassword"
+      placeholder="Confirm password"
+      type="password"
+      :errorMessage="errorMessageState.confirmPassword"
+      :showPassword="showPassword"
+    >
+    </UInput>
 
-
-
-   
-<a href="https://apartments-backend.onrender.com/api/auth/google"><img src="@/assets/icon-png/google.png" alt="google-auth-link"></a>
-<RouterLink :to="{name:'login'}">Enter in another way</RouterLink>
+    <a href="https://apartments-backend.onrender.com/api/auth/google"
+      ><img src="@/assets/icon-png/google.png" alt="google-auth-link"
+    /></a>
+    <RouterLink :to="{ name: 'login' }">Enter in another way</RouterLink>
     <UButton>Зареєструвати</UButton>
   </form>
 </template>
@@ -184,35 +178,32 @@ const onSubmit = async () => {
   margin-bottom: 12px;
 }
 
-.wrapper-password{
+.wrapper-password {
   position: relative;
   display: flex;
   align-items: center;
 }
-.button-eyes{
+.button-eyes {
   position: absolute;
 
   top: 8px;
   outline: none;
   right: 15px;
-background-color: transparent;
-border: none;
+  background-color: transparent;
+  border: none;
   width: 30px;
   height: 30px;
-cursor: pointer;
-
-
-
-
+  cursor: pointer;
 }
-.eyes-icon{
+.eyes-icon {
   width: 32px;
   height: 32px;
-stroke: $main-color;
+  stroke: $main-color;
   fill: transparent;
-&:hover,&:focus{
-  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
- stroke: $activeColor;
-}
+  &:hover,
+  &:focus {
+    transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+    stroke: $activeColor;
+  }
 }
 </style>

@@ -17,7 +17,7 @@ const props = defineProps(
       type: Boolean,
       default: false
     },
-    showPassword:{
+    showPassword: {
       type: Boolean,
       default: false
     },
@@ -56,13 +56,13 @@ function validate() {
     return
   }
 
-  if (!value.value ) {
-    isValid.value = false // update the value of isValid
-    // emit update event
+  if (!value.value) {
+    isValid.value = false
+
     return 'поле обов’язкове'
   } else {
-    isValid.value = true // update the value of isValid
-    emits('update:isValid', isValid.value) // emit update event
+    isValid.value = true
+    emits('update:isValid', isValid.value)
     return props.errorMessage
   }
 }
@@ -78,7 +78,7 @@ const handleInput = (e) => {
   <label class="wrapper__input">
     <slot />
     <input
-      v-if="type !== 'textarea' &&type !== 'password'&& type !== 'number' && type !== 'tel'"
+      v-if="type !== 'textarea' && type !== 'password' && type !== 'number' && type !== 'tel'"
       class="input__universal"
       :type="props.type"
       :placeholder="props.placeholder"
@@ -87,14 +87,12 @@ const handleInput = (e) => {
     />
 
     <input
-    v-if="type === 'password'"
+      v-if="type === 'password'"
       class="input__universal"
       :type="showPassword ? 'text' : 'password'"
       :placeholder="props.placeholder"
       v-model.trim="value"
       :value="modelValue"
-  
-      
     />
 
     <input
@@ -123,7 +121,7 @@ const handleInput = (e) => {
       v-model="value"
       class="textarea"
     ></textarea>
-    <p  class="warning__text" v-if="!isValid">
+    <p class="warning__text" v-if="isValid">
       {{ validate() }}
     </p>
   </label>

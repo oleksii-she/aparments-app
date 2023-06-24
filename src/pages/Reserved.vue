@@ -15,12 +15,10 @@ const apartmentsStore = useApiApartmentsStore()
 const selectedReserveId = ref(null)
 const toggleModal = ref(false)
 const page = ref(1)
-const reserveInfo = ref(null)
 const reservedListToggle = ref(false)
 const { isMobile } = useScreenSize()
 const reservedToggle = ref(null)
 const mobToggleInfo = ref(false)
-const activeIdLink = ref('')
 
 watchEffect(async () => {
   await reserversStore.fetchGetAllReserve()

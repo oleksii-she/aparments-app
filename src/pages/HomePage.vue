@@ -1,5 +1,4 @@
 <script setup>
-// import VPagination from '@hennge/vue3-pagination'
 import { ref, watchEffect, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useApiApartmentsStore, useAuthStore } from '@/stores'

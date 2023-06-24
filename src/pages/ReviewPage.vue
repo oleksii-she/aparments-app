@@ -14,7 +14,7 @@ const { id } = route.params
 const toaster = createToaster({ position: 'top' })
 
 const data = ref(null)
-// const comments = ref(null)
+
 const updateRating = ref(false)
 
 const updateReserve = async (id) => {
@@ -52,10 +52,6 @@ watchEffect(() => {
     fetchApartmentData()
   }
 })
-
-// const roundedRating = (rating) => {
-//   return Math.round(rating)
-// }
 </script>
 <template lang="">
   <main>

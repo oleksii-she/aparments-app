@@ -70,14 +70,11 @@ onBeforeUnmount(() => {
   }
 }
 .modal {
-  /* background: #ffffff; */
   box-shadow: 7px 4px 14px rgba(0, 0, 0, 0.11);
   border-radius: 40px;
-  /* transform: scale(0.5); */
   transition: 0.4s all;
   margin: auto;
 
-  /* padding: 20px; */
   &.show {
     transform: scale(1);
     max-height: 90%;

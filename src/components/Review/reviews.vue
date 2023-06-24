@@ -24,6 +24,7 @@ const toggleModal = ref(false)
 const removeToggleComment = ref(false)
 const isVote = ref(false)
 const page = ref(1)
+const hiddenLoadMore = ref(false)
 
 const toaster = createToaster({ position: 'top' })
 
@@ -42,7 +43,11 @@ watchEffect(async () => {
     if (page.value === 1) {
       await apartmentsStore.fetchGetComments(props.apartment._id, page)
     } else {
-      await apartmentsStore.fetchAddComments(props.apartment._id, page)
+      const comment = await apartmentsStore.fetchAddComments(props.apartment._id, page)
+
+      if (comment === false) {
+        hiddenLoadMore.value = true
+      }
     }
   } catch (error) {
     console.log(error.message)
@@ -95,9 +100,12 @@ const handlerAddComment = async () => {
       return toaster.error('The comment should be longer')
     }
 
-    await apartmentsStore.addCommentPost(props.apartment._id, { comment: addComment.comment })
+    await apartmentsStore.addCommentPost(props.apartment._id, {
+      comment: addComment.comment
+    })
+
     addComment.comment = ''
-    hideDialog()
+    // hideDialog()
   } catch (error) {
     console.log(error.message)
   }
@@ -146,7 +154,13 @@ const onPageClick = () => {
         </div>
       </div>
       <div class="load-more">
-        <p @click="onPageClick" class="load-more__text">Read more...</p>
+        <p
+          @click="onPageClick"
+          class="load-more__text"
+          v-if="apartmentsStore.comments.length >= 2 && !hiddenLoadMore"
+        >
+          Read more...
+        </p>
       </div>
     </div>
     <UButton v-if="isAuth" @click="toggleModal = true" class="button__add-response"
@@ -166,13 +180,18 @@ const onPageClick = () => {
         </div>
         <h2>Write a review</h2>
         <textarea class="form-response__text" v-model="addComment.comment"></textarea>
-        <UButton type="submit">Send</UButton>
+        <mutton type="submit">Send</mutton>
       </form>
     </Modal>
   </div>
 </template>
 
 <style scoped lang="scss">
+.button__add-response {
+  @media screen and (max-width: 1280px) {
+    width: 350px;
+  }
+}
 .reviews {
   background-color: $reviews;
   padding-top: 12px;

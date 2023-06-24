@@ -2,7 +2,6 @@
 <script setup>
 import MoonLoader from 'vue-spinner/src/MoonLoader.vue'
 
-
 const props = defineProps(
   {
     color: {
@@ -20,7 +19,6 @@ const props = defineProps(
   },
   { raw: true, shallow: true }
 )
-// const width = '5px'
 </script>
 
 <template>

@@ -1,16 +1,9 @@
-<script setup>
-// import {  useUserStore } from '@/stores'
-// const { totalReservePost } = useUserStore()
-
-
-</script>
+<script setup></script>
 
 <template>
   <div class="container">
     <div class="wrapper">
-      <!-- <button class="reserve-message" @click="$route.path('answers')">    </button> -->
-
-        <router-link to="/answers" class="reserve-message">
+      <router-link to="/answers" class="reserve-message">
         <svg class="reserve-message__icon">
           <use xlink:href="@/assets/svg/sprite.svg#icon-message"></use>
         </svg>
@@ -20,9 +13,7 @@
           </div>
         </div>
       </router-link>
-  
     </div>
-
   </div>
 </template>
 

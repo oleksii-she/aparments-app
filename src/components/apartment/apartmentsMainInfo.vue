@@ -176,41 +176,42 @@ const onClickToggleImg = (img) => {
       </div>
     </div>
     <div class="info-wrapper">
-      <div class="info-user">
-        <div>
-          <RouterLink
-            v-if="isAuth"
-            class="user-link"
-            :to="{ name: 'userId-info', params: { id: apartment.owner } }"
-          >
-            <h2 class="info-user__title">Information about the owner:</h2>
-            <p class="user-text">Name: {{ apartment.user.user }}</p>
-            <p class="user-text">Tel: {{ apartment.user.phone }}</p>
-            <p class="user-text">E-mail: {{ apartment.user.email }}</p></RouterLink
-          >
-          <RouterLink v-else class="user-link" :to="{ name: 'login' }">
-            <h2 class="info-user__title">Information about the owner:</h2>
-            <p class="user-text">Name: {{ apartment.user.user }}</p>
-            <p class="user-text">Tel: {{ apartment.user.phone }}</p>
-            <p class="user-text">E-mail: {{ apartment.user.email }}</p></RouterLink
-          >
-        </div>
+      <div>
+        <div class="info-user">
+          <div>
+            <RouterLink
+              v-if="isAuth"
+              class="user-link"
+              :to="{ name: 'userId-info', params: { id: apartment.owner } }"
+            >
+              <h2 class="info-user__title">Information about the owner:</h2>
+              <p class="user-text">Name: {{ apartment.user.user }}</p>
+              <p class="user-text">Tel: {{ apartment.user.phone }}</p>
+              <p class="user-text">E-mail: {{ apartment.user.email }}</p></RouterLink
+            >
+            <RouterLink v-else class="user-link" :to="{ name: 'login' }">
+              <h2 class="info-user__title">Information about the owner:</h2>
+              <p class="user-text">Name: {{ apartment.user.user }}</p>
+              <p class="user-text">Tel: {{ apartment.user.phone }}</p>
+              <p class="user-text">E-mail: {{ apartment.user.email }}</p></RouterLink
+            >
 
-        <div v-if="apartment.user.userRating" style="float: right; margin-top: 12px">
-          <URating :rating="roundedRating(apartment.user.userRating)" />
+            <div v-if="apartment.user.userRating" style="text-align: end; margin-top: 12px">
+              <URating :rating="roundedRating(apartment.user.userRating)" />
+            </div>
+          </div>
         </div>
+        <ul class="country-list">
+          <li class="country-list__item">
+            <h3 class="country-list__title">Country: {{ apartment.country }}</h3>
+          </li>
+          <li class="country-list__item">
+            <p>
+              Location: <span class="country-list__span"> {{ apartment.location }}</span>
+            </p>
+          </li>
+        </ul>
       </div>
-      <ul class="country-list">
-        <li class="country-list__item">
-          <h3 class="country-list__title">Country: {{ apartment.country }}</h3>
-        </li>
-        <li class="country-list__item">
-          <p>
-            Location: <span class="country-list__span"> {{ apartment.location }}</span>
-          </p>
-        </li>
-      </ul>
-
       <slot />
 
       <Modal v-if="toggleModalRemove" :toggleModal="toggleModalRemove" :hideDialog="hideModalRemove"
@@ -428,6 +429,8 @@ const onClickToggleImg = (img) => {
   width: 350px;
   text-align: left;
   padding: 10px;
+  min-height: 210px;
+  margin-bottom: 8px;
 
   @media screen and (min-width: 768px) {
     width: 600px;

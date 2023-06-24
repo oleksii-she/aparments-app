@@ -1,5 +1,4 @@
 <script setup>
-// import VPagination from '@hennge/vue3-pagination'
 import { vMask } from '@opentf/vue-input-mask'
 import { ref, watchEffect, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -38,7 +37,6 @@ watchEffect(async () => {
   router.push({ query: { ...route.query, page: page.value } })
   const routeId = route.params.id
   if (routeId && id !== routeId) {
-    // const { user, phone, email, userRating } = userStore.apartments[0].user
     routeIdValue.value = routeId
     const user = await userStore.fetchGetUser(routeId)
 
@@ -63,15 +61,10 @@ watchEffect(async () => {
 
 watchEffect(async () => {
   try {
-    // const { id } = authStore
     if (isVote.value) {
       await userStore.fetchGetUser(routeIdValue.value)
       console.log('fetchGetUser')
     }
-
-    // if (userVoted) {
-    //   isVote.value = true
-    // }
   } catch (error) {
     console.log(error.message)
   }
@@ -198,7 +191,7 @@ const updateValue = async () => {
                 </div>
               </div>
             </div>
-            <!--  v-if="!routeIdValue || authStore.id === routeIdValue" -->
+
             <div class="user-rating-box" v-if="!routeIdValue || authStore.id === routeIdValue">
               <h3>User rating</h3>
               <URating :width="50" :height="50" :rating="userInfo.rating" />

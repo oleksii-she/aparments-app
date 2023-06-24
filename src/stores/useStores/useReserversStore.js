@@ -18,8 +18,9 @@ export const useReserversStore = defineStore({
     async fetchAddReserve(id, data) {
       try {
         this.loading = true
-        await addReserve(id, data)
+        const response = await addReserve(id, data)
         this.loading = false
+        return response
       } catch (error) {
         this.error = error.message
         toaster.error(error.message)
@@ -72,10 +73,8 @@ export const useReserversStore = defineStore({
           return
         }
         this.loading = true
-        const response = await getReserversIdInfo(id)
+        await getReserversIdInfo(id)
         this.loading = false
-
-        // return response.data.result
       } catch (error) {
         this.error = error.message
         toaster.error(error.message)
