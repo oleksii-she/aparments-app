@@ -6,9 +6,9 @@ import { useAuthStore } from '../stores/useStores/useAuthStore'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', redirect: '/apartments' },
+    { path: '/' },
     {
-      path: '/apartments',
+      path: '/',
       name: 'apartments',
       component: HomeView
     },
@@ -47,7 +47,7 @@ const router = createRouter({
     },
 
     {
-      path: '/apartments/review/:id',
+      path: '/review/:id',
 
       component: () => import('../pages/ReviewPage.vue'),
       name: 'review-page'
