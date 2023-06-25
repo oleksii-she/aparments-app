@@ -5,7 +5,7 @@ import Header from './components/header.vue'
 import Logo from './components/logo.vue'
 import Footer from './components/footer.vue'
 // import ReserveMessage from '@/components/reserveMessage/reserveMessage.vue'
-import { useAuthStore, appStore,useUserStore } from '@/stores'
+import { useAuthStore, appStore, useUserStore } from '@/stores'
 import BurgerBtn from './components/burgerBtn.vue'
 import Sidebar from './components/sidebar.vue'
 import NavMenu from './components/navMenu.vue'
@@ -16,16 +16,13 @@ const router = useRouter()
 const authStore = useAuthStore()
 const store = appStore()
 
-
-
-
 onMounted(() => {
-  watchEffect( async() => {
+  watchEffect(async () => {
     // await userStore.fetchUserReserve(authStore.id)
     if (authStore.token) {
       authStore.current()
     }
-    if(!store.isOpen){
+    if (!store.isOpen) {
       window.document.querySelector('body').style.overflow = ''
     }
   })
@@ -40,8 +37,6 @@ const logout = async () => {
     console.log(error.message)
   }
 }
-
-
 </script>
 
 <template>
@@ -50,7 +45,7 @@ const logout = async () => {
       <Header>
         <div class="container">
           <div class="wrapper">
-            <router-link to="/apartments/"> <Logo /></router-link>
+            <router-link to="/"> <Logo /></router-link>
             <BurgerBtn v-if="isMobile" />
             <NavMenu v-if="!isMobile" :isAuth="authStore.isAuth" />
             <Sidebar v-if="store.isOpen" :isAuth="authStore.isAuth" />
@@ -65,9 +60,7 @@ const logout = async () => {
       </Header>
     </header>
     <div class="content">
-      <!-- <ReserveMessage v-if="userStore.totalReservePost"/> -->
       <RouterView />
-
     </div>
 
     <Footer />
@@ -111,5 +104,4 @@ const logout = async () => {
     transition: cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 }
-
 </style>

@@ -47,7 +47,7 @@ const router = createRouter({
     },
 
     {
-      path: '/review/:id',
+      path: '/:id',
 
       component: () => import('../pages/ReviewPage.vue'),
       name: 'review-page'
