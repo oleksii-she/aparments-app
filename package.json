@@ -1,6 +1,6 @@
 {
   "name": "apartments-app",
-  "homepage": "https://oleksii-she.github.io/apartments-app/apartments",
+  "homepage": "https://oleksii-she.github.io/apartments-app",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
