@@ -443,6 +443,7 @@ const onClickToggleImg = (img) => {
     }
     @media screen and (min-width: 1280px) {
       width: 600px;
+      min-height: 159px;
     }
   }
 }
