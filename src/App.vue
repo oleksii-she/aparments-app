@@ -4,21 +4,20 @@ import { useRouter } from 'vue-router'
 import Header from './components/header.vue'
 import Logo from './components/logo.vue'
 import Footer from './components/footer.vue'
-// import ReserveMessage from '@/components/reserveMessage/reserveMessage.vue'
-import { useAuthStore, appStore, useUserStore } from '@/stores'
+
+import { useAuthStore, appStore } from '@/stores'
 import BurgerBtn from './components/burgerBtn.vue'
 import Sidebar from './components/sidebar.vue'
 import NavMenu from './components/navMenu.vue'
 import { useScreenSize } from './utils/useScreenSize'
 import { onMounted, watchEffect } from 'vue'
-// const userStore = useUserStore()
+
 const router = useRouter()
 const authStore = useAuthStore()
 const store = appStore()
 
 onMounted(() => {
   watchEffect(async () => {
-    // await userStore.fetchUserReserve(authStore.id)
     if (authStore.token) {
       authStore.current()
     }
