@@ -11,7 +11,8 @@ export default defineConfig({
       }
     }
   },
-  base: '/apartments-app/',
+  // base: '/apartments-app/',
+  base: '/',
   build: {
     outDir: 'build'
   },
