@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/registration", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/post-new-add", "destination": "/index.html" },
+    { "source": "/:pathMatch(.*)*", "destination": "/index.html" },
+    { "source": "/:id", "destination": "/index.html" },
+    { "source": "/myaccount/", "destination": "/index.html" },
+    { "source": "/myaccount/reserved/", "destination": "/index.html" },
+    { "source": "/myaccount/reserved/:id", "destination": "/index.html" },
+    { "source": "/user/:id", "destination": "/index.html" }
+  ]
+}
