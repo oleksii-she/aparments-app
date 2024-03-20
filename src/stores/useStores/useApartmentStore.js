@@ -1,3 +1,4 @@
+
 import {
   addApartment,
   apartments,
@@ -53,6 +54,7 @@ export const useApiApartmentsStore = defineStore({
         }
         this.loading = true
         const response = await apartmentsId(id)
+        console.log(response, 'fetchApartmentsId');
 
         return response.data
       } catch (error) {
@@ -77,8 +79,8 @@ export const useApiApartmentsStore = defineStore({
     async addApartmentPost(formData) {
       try {
         this.loading = true
-        await addApartment(formData)
-
+        const res = await addApartment(formData)
+console.log(res, 'res');
         this.loading = false
       } catch (error) {
         console.log(error.message)

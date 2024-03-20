@@ -2,8 +2,8 @@ import axios from 'axios'
 
 import { useAuthStore } from '@/stores'
 const axiosInstance = axios.create({
-  baseURL: 'https://apartments-backend.onrender.com/api/'
-  // baseURL: 'http://localhost:4040/api/'
+  // baseURL: 'https://apartments-backend.onrender.com/api/'
+  baseURL: 'http://localhost:4040/api/'
   // http://localhost:5173
 })
 

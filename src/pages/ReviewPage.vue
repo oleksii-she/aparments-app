@@ -28,8 +28,9 @@ const updateReserve = async (id) => {
 
 const fetchApartmentData = async () => {
   try {
-    const result = await apartmentsStore.fetchApartmentsId(id)
-    data.value = result.result
+    const {result, user} = await apartmentsStore.fetchApartmentsId(id)
+
+    data.value = {...result,user}
   } catch (error) {
     toaster.error(error.message)
   }
