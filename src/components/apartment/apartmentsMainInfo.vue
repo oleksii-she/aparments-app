@@ -42,7 +42,6 @@ const toggleReserve = ref(false)
 const currentSlide = ref(0)
 const toggleImg = ref(false)
 const imgLink = ref(null)
-
 watchEffect(async () => {
   if (id !== props.apartment.owner) {
     const userVoted = props.apartment.ratings.find((el) => el.user === id)
@@ -104,10 +103,7 @@ const onClickToggleImg = (img) => {
   imgLink.value = img
   toggleImg.value = true
 }
-
-console.log(props.apartment, 'apartment')
 </script>
-
 <template>
   <div class="review-wrapper">
     <BackBtn class="button-back" @click="goBack">back</BackBtn>

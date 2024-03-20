@@ -1,5 +1,4 @@
 <script setup>
-
 defineProps({
   apartments: {
     type: Object,
@@ -8,7 +7,7 @@ defineProps({
 })
 </script>
 <template>
-  <ul class="home-page__list">
+  <ul class="home-page-list">
     <template v-for="apartment in apartments" :key="apartment._id">
       <slot v-bind:apartment="apartment" name="apartment"></slot>
     </template>
@@ -16,11 +15,16 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
-.home-page__list {
+.home-page-list {
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin: 0;
+  flex-direction: column;
+  justify-content: center;
+
+  @media screen and (min-width: 768px) {
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 </style>
