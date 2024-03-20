@@ -395,31 +395,48 @@ const onClickToggleImg = (img) => {
 }
 .price {
   &__list {
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
+    // display: flex;
+    // flex-direction: column;
+    // row-gap: 10px;
     background-color: #e1efff;
+    border-radius: 8px;
     width: 350px;
     padding: 20px;
 
-    @media screen and (min-width: 768px) {
-      display: flex;
-      width: 600px;
+    // @media screen and (min-width: 768px) {
+    //   display: flex;
+    //   width: 600px;
 
-      justify-content: center;
-      align-items: center;
-      flex-direction: row;
-      column-gap: 30px;
+    //   justify-content: center;
+    //   align-items: center;
+    //   flex-direction: row;
+    //   column-gap: 30px;
+    // }
+    li {
+      margin-bottom: 8px;
+      border-bottom: 1px solid $main-color;
+
+      p {
+        color: $activeColor;
+      }
+      span {
+        color: $main-color;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
   &__text {
     font-size: 20px;
     line-height: 24px;
+
     @media screen and (min-width: 768px) {
       display: flex;
+      justify-content: space-between;
       gap: 8px;
-      flex-direction: column;
+      // flex-direction: column;
       align-items: center;
     }
   }
