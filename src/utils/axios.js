@@ -1,9 +1,12 @@
 import axios from 'axios'
 
 import { useAuthStore } from '@/stores'
+
+const url = import.meta.env.VITE_API_URL
+
 const axiosInstance = axios.create({
   // baseURL: 'https://apartments-backend.onrender.com/api/'
-  baseURL: 'http://localhost:4040/api/'
+  baseURL:url
   // http://localhost:5173
 })
 
