@@ -105,7 +105,7 @@ const handlerAddComment = async () => {
     })
 
     addComment.comment = ''
-    // hideDialog()
+    hideDialog()
   } catch (error) {
     console.log(error.message)
   }
@@ -180,7 +180,7 @@ const onPageClick = () => {
         </div>
         <h2>Write a review</h2>
         <textarea class="form-response__text" v-model="addComment.comment"></textarea>
-        <mutton type="submit">Send</mutton>
+        <button type="submit">Send</button>
       </form>
     </Modal>
   </div>

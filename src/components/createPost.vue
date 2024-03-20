@@ -8,9 +8,9 @@ import { useAuthStore } from '@/stores'
 import { countriesApi } from '../services/apiOther'
 import { createToaster } from '@meforma/vue-toaster'
 import { watchEffect } from 'vue'
-import Modal from'./global/modal.vue'
+import Modal from './global/modal.vue'
 import PhoneWarning from './phoneWarning.vue'
-const authStore=useAuthStore()
+const authStore = useAuthStore()
 const createPost = reactive({
   name: '',
   location: '',
@@ -33,7 +33,6 @@ const countries = ref(null)
 const showCountriesList = ref(true)
 const input = ref(null)
 const phoneWarningToggle = ref(false)
-
 
 watchEffect(() => {
   if (authStore.phone === '+380000000000') {
@@ -209,22 +208,22 @@ const onSubmit = async (e) => {
   }
 }
 
-const hideModalRemove = ()=>{
-
+const hideModalRemove = () => {
   router.push({ name: 'apartments' })
-  return phoneWarningToggle.value=!phoneWarningToggle.value
+  return (phoneWarningToggle.value = !phoneWarningToggle.value)
 }
 </script>
 
 <template lang="">
-
   <ULoader :loading="loading" />
   <form @submit.prevent.stop="onSubmit" class="form__advertisement">
-    <Modal v-if="phoneWarningToggle" :toggleModal='phoneWarningToggle' :hideDialog="hideModalRemove"><PhoneWarning/></Modal>
-    <h2 class="title__form-create">Create an ad</h2>
+    <Modal v-if="phoneWarningToggle" :toggleModal="phoneWarningToggle" :hideDialog="hideModalRemove"
+      ><PhoneWarning
+    /></Modal>
+    <h2 class="title__form-create">Add apartment</h2>
     <div class="top__wrapper">
       <UInput v-model="createPost.name" placeholder="Назва оголошення" class="uinput">
-        <p class="title-input">The name of the ad</p></UInput
+        <p class="title-input">Name</p></UInput
       >
 
       <div>
@@ -255,16 +254,8 @@ const hideModalRemove = ()=>{
     <div class="average__wrapper">
       <div class="main__photo">
         <h3 :style="{ marginBottom: '7px' }">Main photo</h3>
-        <label for="" class="cover-img__wrapper">
-          <button v-if="createPost.coverImage" class="clear-img" @click="deleteCoverImage">
-            <svg class="clear-img__icon">
-              <use xlink:href="@/assets/svg/sprite.svg#icon-cancel-circle"></use>
-            </svg>
-          </button>
-          <div class="img__box">
-            <img v-if="createPost.coverImage" :src="previewFilePath" alt="" class="image" />
-          </div>
-          <svg class="icon" v-if="!createPost.coverImage">
+        <div for="" class="cover-img__wrapper" v-if="!createPost.coverImage">
+          <svg class="icon">
             <use xlink:href="@/assets/svg/sprite.svg#icon-create__img"></use>
           </svg>
           <input
@@ -275,7 +266,16 @@ const hideModalRemove = ()=>{
             multiple
             @change="uploadFile"
           />
-        </label>
+        </div>
+        <div class="img__box" v-else>
+          <img v-if="createPost.coverImage" :src="previewFilePath" alt="" class="image" />
+
+          <button class="clear-img" @click="deleteCoverImage">
+            <svg class="clear-img__icon">
+              <use xlink:href="@/assets/svg/sprite.svg#icon-cancel-circle"></use>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="input-block__right">
@@ -371,7 +371,7 @@ const hideModalRemove = ()=>{
       </div>
     </div>
 
-    <UButton  v-if="!phoneWarningToggle">Create an ad</UButton>
+    <UButton v-if="!phoneWarningToggle">Create an ad</UButton>
   </form>
 </template>
 
@@ -385,7 +385,6 @@ const hideModalRemove = ()=>{
   @media screen and (max-width: 768px) {
     padding-top: 20px;
   }
-
 }
 .input-wrapper {
   @media screen and (min-width: 1280px) {
@@ -487,19 +486,22 @@ const hideModalRemove = ()=>{
 }
 
 .image {
+  border-radius: 16px;
   object-fit: cover;
+  width: 100%;
   width: 320px;
   height: 320px;
-  @media screen and (min-width: 768px) {
-    width: 320px;
-    height: 320px;
-  }
+  // @media screen and (min-width: 768px) {
+  //   max-width: 480px;
+  //   // height: 320px;
+  // }
   @media screen and (min-width: 1280px) {
     width: 480px;
     height: 480px;
   }
 }
 .images {
+  border-radius: 16px;
   width: 240px;
   height: 240px;
   @media screen and (min-width: 768px) {
@@ -546,9 +548,10 @@ const hideModalRemove = ()=>{
   &__icon {
     width: 28px;
     height: 28px;
-    fill: rgb(10, 6, 25);
+    fill: $activeColor;
     &:hover {
-      fill: $activeColor;
+      fill: $hoverColor;
+      transition: $transition;
     }
   }
 }

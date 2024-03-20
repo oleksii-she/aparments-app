@@ -129,6 +129,7 @@ const handleInput = (e) => {
 
 <style scoped lang="scss">
 .input__universal {
+  border-radius: 8px;
   border: 2px solid $secondary-color;
   outline: rgb(237, 88, 1);
   padding: 12px 31px;
@@ -143,6 +144,7 @@ const handleInput = (e) => {
 }
 
 .textarea {
+  border-radius: 8px;
   @media screen and (min-width: 1280px) {
     width: 500px;
     height: 200px;
