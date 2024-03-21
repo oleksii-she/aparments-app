@@ -44,18 +44,25 @@ const roundedRating = Math.round(props.rating)
 
 .apartment-item {
   cursor: pointer;
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
+  // margin-bottom: 20px;
+  // &:last-child {
+  //   margin-bottom: 0;
+  // }
   width: 100%;
+  max-width: 408px;
   @media screen and (min-width: 768px) {
     width: calc((100% / 2) - 20px);
+    // margin-right: 20px;
+    height: 592px;
+    // &:last-child {
+    //   margin-right: 0px;
+    // }
   }
 
   @media screen and (min-width: 1280px) {
     position: relative;
     width: calc((100% / 3) - 20px);
+    height: max-content;
   }
 
   @media screen and (min-width: 1920px) {
@@ -65,7 +72,6 @@ const roundedRating = Math.round(props.rating)
   &__image {
     object-fit: cover;
     width: 100%;
-    max-width: 408px;
 
     @media screen and (min-width: 1280px) {
       height: 220px;
@@ -80,6 +86,7 @@ const roundedRating = Math.round(props.rating)
 
   padding-bottom: 16px;
   border-bottom: 2px solid $main-color;
+  height: 160px;
 
   @media screen and (min-width: 1280px) {
     border-bottom: 0;
@@ -99,10 +106,6 @@ const roundedRating = Math.round(props.rating)
   }
   h2 {
     width: 270px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
 
     font-weight: 700;
     font-size: 22px;
@@ -114,6 +117,12 @@ const roundedRating = Math.round(props.rating)
     }
   }
 
+  &__text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
   p {
     margin-bottom: 8px;
     &:last-child {
