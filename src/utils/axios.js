@@ -5,8 +5,7 @@ import { useAuthStore } from '@/stores'
 const url = import.meta.env.VITE_API_URL
 
 const axiosInstance = axios.create({
-  // baseURL:url
-  baseURL:'https://apartments-backend.vercel.app/'
+  baseURL:url
 })
 
 axiosInstance.interceptors.request.use(
