@@ -46,9 +46,6 @@ const scrollBottomHandler = () => {
     if (chatList && joinState.messages.length > 6) {
       console.log('змонтовано')
       chatList.scrollTop = chatList.scrollHeight
-      // const scrollHeight = chatList.scrollHeight
-      // const currentScrollTop = chatList.scrollTop
-      // currentScrollTop = scrollHeight
     }
   }, 500)
 }
@@ -58,13 +55,8 @@ watchEffect(async () => {
     joinState.name = authStore.name
   }
 
-  const res = await authStore.getChats()
+  await authStore.getChats()
 
-  // if (res.result.length > 6) {
-  //   // setTimeout(() => {
-  //   // listToBottomHandler()
-  //   // }, 100)
-  // }
   joinState.messages = [...authStore.chatItems]
 })
 
