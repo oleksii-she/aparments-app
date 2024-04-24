@@ -12,7 +12,7 @@ import { createToaster } from '@meforma/vue-toaster'
 import AddRating from '../components/AddRating.vue'
 const route = useRoute()
 const router = useRouter()
-const perPage = 9
+const perPage = 12
 const userStore = useUserStore()
 const page = ref(parseInt(route.query.page) || 1)
 const authStore = useAuthStore()

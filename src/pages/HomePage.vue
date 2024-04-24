@@ -12,7 +12,7 @@ import PhoneWarning from '../components/phoneWarning.vue'
 const apiStore = useApiApartmentsStore()
 const route = useRoute()
 const router = useRouter()
-const perPage = 9
+const perPage = 12
 const authStore = useAuthStore()
 
 const selectedCountry = ref(null)
@@ -154,6 +154,7 @@ watch(selectedPrice, async () => {
   align-items: center;
   justify-content: flex-end;
   flex-direction: column-reverse;
+  padding-bottom: 40px;
 }
 .paginate {
   justify-content: center;

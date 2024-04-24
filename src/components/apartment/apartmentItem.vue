@@ -53,7 +53,7 @@ const roundedRating = Math.round(props.rating)
   @media screen and (min-width: 768px) {
     width: calc((100% / 2) - 20px);
     // margin-right: 20px;
-    height: 592px;
+    // height: 592px;
     // &:last-child {
     //   margin-right: 0px;
     // }

@@ -11,7 +11,7 @@ export const addApartment = async (userData) => {
 }
 
 export const apartments = async (page, country) => {
-  const response = await axiosInstance.get(`apartments/?limit=9&page=${page}&country=${country}`)
+  const response = await axiosInstance.get(`apartments/?limit=12&page=${page}&country=${country}`)
   return response.data
 }
 

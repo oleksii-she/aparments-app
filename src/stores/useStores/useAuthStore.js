@@ -6,7 +6,7 @@ import {
   logoutUser,
   updateUser
 } from '../../services/apiAuth'
-
+import { getAllChat, getAllChatQueryPage } from '../../services/apiChat'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     name: '',
@@ -15,12 +15,14 @@ export const useAuthStore = defineStore('auth', {
     statusError: '',
     token: '',
     id: '',
-    isAuth: false
+    isAuth: false,
+    isJoinAuth: false,
+    chatItems: []
   }),
 
   persist: {
     storage: localStorage,
-    paths: ['token', 'isAuth', 'id', 'phone']
+    paths: ['isJoinAuth', 'token', 'isAuth', 'id', 'phone']
   },
 
   actions: {
@@ -65,7 +67,6 @@ export const useAuthStore = defineStore('auth', {
         this.phone = response.phone
         this.id = response._id
       } catch (error) {
-        console.log(error.message)
         this.isAuth = false
         this.token = ''
         this.email = ''
@@ -104,6 +105,42 @@ export const useAuthStore = defineStore('auth', {
     },
     async fetchUpdateUser(data) {
       await updateUser(data)
+    },
+
+    async getChats() {
+      if (!this.isJoinAuth) return
+      try {
+        const { data } = await getAllChat()
+
+        const newData = [...data.result].sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+
+        this.chatItems = [...newData]
+        this.isJoinAuth = true
+        return data
+      } catch (error) {
+        console.error('Error fetching chats:', error)
+        // Розгляньте можливість відправлення повідомлення про помилку користувачеві
+      }
+    },
+
+    async getChatsPage(page) {
+      if (!this.isJoinAuth) return
+      try {
+        if (page === 1) return
+        const { data } = await getAllChatQueryPage(page)
+
+        this.totalPost = data.totalPosts
+
+        const newData = [...data.result].sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+
+        this.chatItems = [...newData, ...this.chatItems]
+        this.isJoinAuth = true
+
+        return data
+      } catch (error) {
+        console.error('Error fetching chats:', error)
+        // Розгляньте можливість відправлення повідомлення про помилку користувачеві
+      }
     }
   }
 })

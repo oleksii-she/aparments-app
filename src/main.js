@@ -13,7 +13,9 @@ import 'vue3-carousel/dist/carousel.css'
 import dayjs from 'dayjs'
 
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-
+import { register } from 'swiper/element/bundle'
+// register Swiper custom elements
+register()
 dayjs.extend(customParseFormat)
 const app = createApp(App)
 app.config.globalProperties.$dayjs = dayjs

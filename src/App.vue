@@ -62,7 +62,7 @@ const logout = async () => {
       <RouterView />
     </div>
 
-    <Footer />
+    <Footer></Footer>
   </div>
 </template>
 

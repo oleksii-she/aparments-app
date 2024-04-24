@@ -7,7 +7,6 @@ body {
   font-family: Montserrat, sans-serif;
   font-weight: 500;
   margin: 0;
-
 }
 
 p {
@@ -30,4 +29,86 @@ h4 {
 }
 div {
   width: auto;
+}
+
+.mySwiper {
+  width: 800px;
+}
+
+.my-thumbs {
+  width: 600px;
+}
+
+.image {
+  width: 800px;
+}
+
+.image-box {
+  width: calc(100vw - 30px);
+       max-width: 800px;
+    @media screen and (min-width: 767px) {
+        max-width: 800px;
+    }
+
+}
+
+.swiper-cover-img {
+
+  &__image {
+    @media screen and (min-width: 767px) {
+      width: 100%;
+      max-width: 800px;
+    }
+  }
+}
+
+
+
+.swiper-modal{
+  width: 100vw;
+
+     @media screen and (min-width: 767px) {
+      max-width: 1200px;
+     }
+
+
+  &__img{
+    width: 100%;
+    // object-fit: contain;
+  }
+}
+
+.boxx{
+  margin: 0 auto;
+}
+.my-thumbs{
+
+div{
+  .swiper-wrapper{
+   justify-content: center;
+  }
+
+
+}
+    width: calc(100vw - 30px);
+  height: 100px;
+  @media screen and (min-width: 767px) {
+      height: 120px;
+  }
+
+  
+  &__img{
+    // width: 40px;
+        //  height:100%;
+width: 80px;
+    object-fit: contain;
+
+      @media screen and (min-width: 767px) {
+        width: 120px;
+      }
+  }
+
+  &__item{
+      // width: 90px;
+  }
 }

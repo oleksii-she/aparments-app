@@ -2,12 +2,12 @@
 import { ref, watchEffect } from 'vue'
 import { useAuthStore } from '@/stores'
 import { useApiApartmentsStore } from '@/stores/useStores/useApartmentStore'
-import { Carousel, Slide, Navigation } from 'vue3-carousel'
+// import { Carousel, Slide, Navigation } from 'vue3-carousel'
 import Modal from '../global/modal.vue'
 import BackBtn from '../global/BackBtn.vue'
 import { useRouter } from 'vue-router'
 import URating from '../global/URating.vue'
-
+// import { Navigation, Pagination } from 'swiper/modules'
 import Reserve from '../addReserve.vue'
 
 const emits = defineEmits(['update:updateRating'])
@@ -99,9 +99,9 @@ const roundedRating = (rating) => {
 const slideTo = (index) => {
   currentSlide.value = index
 }
-const onClickToggleImg = (img) => {
-  imgLink.value = img
-  toggleImg.value = true
+const onClickToggleImg = () => {
+  //   // imgLink.value = img
+  toggleImg.value = !toggleImg.value
 }
 </script>
 <template>
@@ -112,7 +112,60 @@ const onClickToggleImg = (img) => {
         <h2 class="heading__title">{{ apartment.name }}</h2>
         <URating :rating="roundedRating(apartment.rating)" />
       </div>
-      <div class="img-gallery">
+      <div class="image-box">
+        <swiper-container
+          v-if="images"
+          navigation="true"
+          thumbs-swiper=".my-thumbs"
+          pagination="true"
+          speed="500"
+          loop="true"
+          css-mode="true"
+          controller-control=".swiper-2"
+          class="swiper-cover-img"
+        >
+          <swiper-slide @click="onClickToggleImg" v-for="image in images" :key="image"
+            ><img class="swiper-cover-img__image" :src="image" :alt="apartment.name"
+          /></swiper-slide>
+        </swiper-container>
+
+        <Modal v-if="toggleImg" :toggleModal="toggleImg" :hideDialog="hideToggleImg" :padding="0">
+          <swiper-container
+            :style="{
+              '--swiper-navigation-color': '#fff',
+              '--swiper-pagination-color': '#fff'
+              // '': 'center'
+            }"
+            navigation="true"
+            thumbs-swiper=".my-thumbs"
+            pagination="true"
+            speed="500"
+            loop="true"
+            css-mode="true"
+            controller-control=".swiper-2"
+            class="swiper-modal"
+          >
+            <swiper-slide v-for="image in images" :key="image"
+              ><img :src="image" :alt="apartment.name" class="swiper-modal__img"
+            /></swiper-slide>
+          </swiper-container>
+          <div class="boxx">
+            <swiper-container
+              style="justify-content: center"
+              justify-content="center"
+              space-between="20"
+              class="my-thumbs"
+              controller-control=".swiper-1"
+              slides-per-view="4"
+            >
+              <swiper-slide v-for="image in images" :key="image" class="my-thumbs__item"
+                ><img :src="image" :alt="apartment.name" class="my-thumbs__img"
+              /></swiper-slide>
+            </swiper-container>
+          </div>
+        </Modal>
+      </div>
+      <!-- <div class="img-gallery">
         <carousel :items-to-show="1" class="carousel" v-model="currentSlide">
           <slide v-for="image in images" :key="image">
             <div class="carousel__item" @click="onClickToggleImg(image)">
@@ -136,7 +189,8 @@ const onClickToggleImg = (img) => {
         <Modal v-if="toggleImg" :toggleModal="toggleImg" :hideDialog="hideToggleImg" :padding="0">
           <img :src="imgLink" :alt="apartment.name" class="img" />
         </Modal>
-      </div>
+      </div> -->
+
       <div class="price">
         <ul class="price__list">
           <li class="price__item">
