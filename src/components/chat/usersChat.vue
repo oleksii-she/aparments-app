@@ -265,7 +265,7 @@ const classChatToggle = () => {
 
 <template>
   <div :class="classChatToggle()">
-    <button class="collapse" @click="handlerCollapseChat">
+    <button v-if="authStore.isJoinAuth" class="collapse" @click="handlerCollapseChat">
       <svg :class="!collapseChat ? 'collapse__bottom-icon---rotate' : 'collapse__bottom-icon'">
         <use xlink:href="/src/assets/svg/sprite.svg#icon-collapse"></use>
       </svg>
@@ -345,7 +345,7 @@ const classChatToggle = () => {
           </div>
         </li>
       </ul>
-      <div v-if="!collapseChat && !joinState.messages.length">
+      <div v-if="!collapseChat && !joinState.messages.length" class="chat__message-wrapper">
         <p class="message">
           There are currently no messages, you can be the first, write and others will join
         </p>
@@ -540,6 +540,13 @@ const classChatToggle = () => {
     height: 60px;
     margin: 0;
     overflow: auto;
+  }
+  &__message-wrapper {
+    flex: 1 1 auto;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   &__item {
