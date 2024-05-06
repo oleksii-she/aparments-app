@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 import { io } from 'socket.io-client'
-const url = import.meta.env.VITE_API_URL_Default
+const url = import.meta.env.VITE_API_URL_DEFAULT
 
 export const state = reactive({
   connected: false,
@@ -9,9 +9,9 @@ export const state = reactive({
 })
 
 // "undefined" means the URL will be computed from the `window.location` object
-// const URL = process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:3000'
+// const URL = import.meta.env.VITE_API_URL_DEFAULT === 'production' ? undefined : url
 
-export const socket = io(`${url}}`, {
+export const socket = io(url, {
   autoConnect: true
 })
 

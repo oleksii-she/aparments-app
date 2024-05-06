@@ -366,7 +366,6 @@ const classChatToggle = () => {
           name="message"
           v-model="updateMessage.message"
           id=""
-          v-on:keyup.enter="updateChatIdHandler"
         ></textarea>
 
         <textarea
@@ -376,10 +375,9 @@ const classChatToggle = () => {
           cols="1"
           rows="1"
           v-model="joinState.message"
-          v-on:keyup.enter="onMessageEnter"
           @input="autoResize"
         ></textarea>
-        <button>
+        <button @click="onMessageEnter">
           <svg class="chat__edit-icon">
             <use xlink:href="/src/assets/svg/sprite.svg#icon-send"></use>
           </svg>
